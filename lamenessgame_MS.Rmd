@@ -1,0 +1,847 @@
+---
+title: Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition
+author: Matt L. Jones$^1$, Maxwell S. Barnish$^2$, Robert R. Hughes$^3$, Aimee Murray$^1$, Omid Mansour$^4$, Tiziana Loni, Holly Vickery$^5$, Myfanwy Lloyd Evans$^6$, Laura Green$^7$, Nervo Verdezoto$^4$
+output:
+  officedown::rdocx_document:
+    plots:
+      align: center
+      topcaption: yes
+      caption:
+        style: Image Caption
+        pre: 'Figure '
+        sep: ': '
+        tnd: 0
+        tns: '-'
+        fp_text: !expr officer::fp_text_lite(bold = FALSE)
+    tables:
+      caption:
+        style: Table Caption
+        pre: 'Table '
+        sep: ': '
+        tnd: 0
+        tns: '-'
+        fp_text: !expr officer::fp_text_lite(bold = TRUE)
+    reference_docx: article_template.docx
+  html_document:
+    df_print: paged
+bibliography: lamenessgame_refs.bib
+includeline-num: true
+---
+
+```{=html}
+<style>
+body {
+text-align: justify}
+</style>
+```
+```{r setup, include=FALSE}
+
+library(officer)
+library(flextable)
+library(dplyr)
+
+knitr::opts_chunk$set(echo = TRUE, dpi=300, fig.pos = "!h", out.extra = "", ft.keepnext = F)
+
+## Custom function to restart numbering at the start of each new chapter.
+## You could also just do this manually!
+new_chapter <- function(){
+  if(!exists("chapter_count")) chapter_count <<- 0 
+  chapter_count <<- chapter_count + 1
+  }
+
+
+library(captioner)
+fig_nums <- captioner(prefix = "Figure", suffix = ":", auto_space = TRUE,
+  style = NULL, style_prefix = FALSE, levels = 1, type = NULL,
+  infix = ".", before = TRUE, knitr_op = NULL, css_class = NULL)
+
+suppfig_nums <- captioner(prefix = "Supplementary Figure", suffix = ":", auto_space = TRUE,
+  style = NULL, style_prefix = FALSE, levels = 1, type = NULL,
+  infix = ".", before = TRUE, knitr_op = NULL, css_class = NULL)
+
+
+options(digits=2)
+options(scipen=1000)
+#data
+studydata_formatted<-read.csv('outputs/processed_data/studydata_formatted.csv')
+#power analysis
+power_analysis<-readRDS('outputs/models/power_analysis.RDS')
+#models
+farmingexperience_model<-readRDS('outputs/models/farmingexperience_model.RDS')
+sign_limp_model<-readRDS('outputs/models/symptom_limp_model.RDS')
+sign_raisedleg_model<-readRDS('outputs/models/symptom_raisedleg_model.RDS')
+userengagement_model<-readRDS('outputs/models/userengagement_model.RDS')
+budgettable<-read.csv('outputs/figures/budget.csv', encoding='latin1', check.names = F)
+
+```
+
+------------------------------------------------------------------------
+
+1.  European Centre for the Environment & Human Health, University of Exeter Medical School, Knowledge Spa, Royal Cornwall Hospital, Truro, Cornwall, TR1 3HD, UK
+2.  University of Exeter Medical School, South Cloisters, University of Exeter, St Luke's Campus, Heavitree Road, Exeter, EX1 2LU, UK
+3.  Faculty of Engineering, University of Bristol, Bristol, BS8 1TR, UK
+4.  School of Computer Science and Informatics, Human-centered Computing Group, Cardiff University
+5.  School of Agriculture, Policy and Development, University of Reading, Reading, RG6 6AR, UK
+6.  Evans Farm, Dolgellau, UK
+7.  Life and Environmental Sciences, University of Birmingham, Birmingham, B15 2TT, UK
+
+# Abstract
+
+Computer simulation games are increasingly being used in agriculture as a promising tool to study, support and influence real-life farming practices - especially when other alternatives can be costly, restrictive, or impractical. Here, we explored the potential of using simulation games to engage with UK sheep farmers on the ongoing challenge of reducing the lameness burden in the UK sheep industry. Using a human-centered design approach, we developed with UK stakeholders a game that tests players' ability to recognise the early signs of lameness in sheep. In an online evaluation study, we then evaluated how those with real-life farming experience felt about the game, and whether their performance playing it was related to their real-life experience and skills. Several participants thought the game was an interesting idea, and the game provided a conduit for participants to share interesting reflections on lameness recognition. However, our study also revealed that this medium was technically challenging to implement on a small budget, impacting participants' engagement with the game. In particular, the intricacies of real-life farming practices such as lameness recognition demand high levels of realism from such simulation video games, which is not only hard to achieve but hard to balance with the entertainment-factor required to keep players engaged, as well as budgetary constraints. We conclude that future studies exploring the potential of game-based tools for engaging with farmers on aspects of livestock health might need considerably more resources and/or to benefit from using existing, hyper-real simulation games that have an established (agricultural) audience and entertainment value.
+
+\newpage
+
+# Background
+
+Lameness is a major burden on UK sheep farming; estimated to cost farmers between £3.90 and £6.30 per ewe per year [@winter2017], and the industry as a whole £28-80 million per year [@nieuwhof2005a; @wassink2010]. As well as economic costs associated with veterinary expenses and livestock productivity losses, lameness also constitutes a substantial animal welfare [@fawc2011; @nalon2019] and antibiotic stewardship issue [@davies2017], making it a priority issue for the sheep farming industry to address. In 2011, the Farm Animal Welfare Council (FAWC) challenged UK sheep farmers to reduce the average prevalence of lameness on UK sheep farms to less than 5% by 2016 and less 2% by 2021 - targets that were, at the time, considered achievable using evidence-based techniques [@fawc2011]. Whilst the initial 5% target appears to have been met - with a well-randomised study estimating the mean flock prevalence of lameness in the UK to be 3.5% (ewes) in 2013 [@winter2015] - there are signs that progress may have since stalled. The most recent (though non-randomised) study estimated a mean flock prevalence of lameness (ewes) of 3.2% in the 2018-2019 period, suggesting that farmers were not on track to reach the 2021 2% target [@best2021]. Furthermore, there are indications of limited uptake and farmer scepticism towards some of the lameness-reduction techniques recommended by the FAWC [@best2020; @best2021], and that the numbers of farmers practicing key effective treatments may be reducing over time [@prosser2019]. Collectively, these observations suggest that new approaches might be needed to facilitate knowledge transfer between farmers and other interested parties to reduce lameness in the UK.
+
+One new strategy to facilitate knowledge exchange between farmers and non-farmers that has recently been explored in agricultural fields is the use of game-based approaches to facilitate innovation, participation and multiple stakeholders perspectives [@hernandez-aguilera2020; @berthet2016]. The progress of information and communication technology (ICT) has led to the development of farm-based computer and video games worldwide that have actively engaged players in virtual farming environments [@sutherland2020]. Indeed, computer-mediated virtual agricultural environments are well-established as mass-appeal simulation video games such as FarmVille and Farming Simulator, which serve as forms of entertainment for non-farmers and farmers alike [@lane2018]. However, more recently, virtual environments have begun to be used as pedagogic and research tools for engaging with farmers in order to address serious, real-world issues. Most commonly, researchers have explored the use of virtual environments for educational purposes; as virtual learning environments that have benefits such as making agricultural training more logistically feasible, affordable and accessible [@barber2016]. Several projects have developed and explored the potential of games of this sort - including small projects developing games for teaching crop cultivation and livestock breeding skills [@yoo2014; @szilágyi2017], a large international project to develop a more all-encompassing agricultural training game [@gates2019; @fountasspyros2019], and a project exploring the potential of virtual reality-assisted agricultural training [@barber2016]. Virtual agricultural environments may also serve less obvious knowledge exchange purposes; for example, to encourage the adoption of precision agriculture technologies [@pavlenko2021]; to exchange knowledge and perspectives on farm design among farmers, researchers and advisors [@moojen2022]; to facilitate information sharing among farmers and with non-farmer stakeholders dealing with agricultural issues [@hernandez-aguilera2020; @nuritha2017]. The idea of using virtual environments as tools for engaging with farmers is thus being taken increasingly seriously; representing a new, innovative, participatory, and even fun approach to understanding and addressing the real-world challenges of modern agriculture.
+
+Here, we explore the potential of using computer-based gaming as an innovative approach to engage with UK sheep farmers and other stakeholders on the issue of the early recognition of the signs of lameness. Lameness is a change in gait, or locomotion, which can be visually recognised and graded according to increasing severity of change in gait [@kaler2011]. Sheep farmers recognise different severities of lameness innately, and farmers that report that they recognise, catch and treat the first mildly lame sheep in a group experience lower prevalences of lameness compared to farmers who wait until sheep are more severely lame before they catch them [@kaler2008; @winter2015]. Following a human-centered design approach, we developed a game (The Lameness Game) that is intended to support lameness reduction by serving as a tool to help assess, train and understand farmers' ability to recognise the earliest, subtlest signs of lameness. We evaluated our game through an online evaluation study with a wider group of experts playing and giving feedback on our prototype game, reporting our analysis of their feedback and in-game performance in order to assess the games' potential here.
+
+```{=html}
+<!-- We conclude that whilst the use of such games shows some promise for gaining new understandings of farmers' relationship to the health of their livestock, this medium presents several key challenges that have important implications for the use of serious games in agriculture more generally.
+... -->
+```
+# Materials and methods
+
+## Development of the game
+
+The game was developed iteratively using a human-centered design (HCD) process in which potential users (farmers, farm veterinarians and academics in the field) were involved throughout all stages of the design process [@hanington2017], and substantially shaped the final game we evaluate here (see Supplementary Figure \@ref(fig:designprocessfig)). This process began in June 2020, when our interdisciplinary group of researchers (with expertise in microbiology, engineering, social science, and human-computer interaction) started a small project (with a budget of £5000) to initially explore the potential use of game-based approaches in the context of antibiotic use practices in livestock production. There were three main phases of development.
+
+### Phase 1: Gathering initial requirements and responses to early ideas about a game about antibiotic use in livestock production
+
+During the initial requirement gathering stage, we took a rapid approach and conducted interviews with 4 farmers/farm vets recruited through the JustFarmers platform [@jones2022]. Interviews were ethically approved by Cardiff University School of Informatics Ethics Committee, and comprised two parts - a first part of the interview attempting to understand the participant's experiences and challenges managing disease in livestock production including the current use of antibiotic in livestock production, and a second part in which we started to explore the design space using iterative prototyping to visualize and communicate two early prototypes to explore their possibilities, and limitations [@lim2008], as well as to provoke discussions and look for alternative ideas [@fallman2008]. The first design exploration included a wireframe of an envisioned game that visualized a simple farm with cattle that was used to communicate with the research team and the participants to explore the concept of antibiotic use in agriculture. The second design exploration aimed to provide a 2D visual representation of the farm and the animals and complemented with a journal entry in the top left corner that listed the symptoms of a selected animal. Both designs were intended to broadly demonstrate the concept of a game centered around appropriately treating sick animals with antibiotics, to stimulate discussion with farmers about whether such a game might be useful for education, researching antibiotic-administration behaviour among farmers or other purposes we had not considered. Participants discussed the early prototypes and provided their opinions and perspectives on their utility to test the initial game ideas. Four farmers commented on these early prototypes.
+
+The interviews and feedback sessions around the prototypes with farmers and vets were recorded and thematically analyzed [@braun2006]. One of the major findings was that farmers felt that an explicit emphasis on antibiotic use practices was not necessary, since antibiotic use practices in livestock production are underpinned by stockpersonship in animal health management and the farmer's challenges and ability to early recognize animal behavioral signs and physical characteristics of sick animals. Regarding the first version of the prototype, participants highlighted the importance of the realism of the game in relation to the natural surroundings of the farm and the animals. In addition, participants highlighted how unrealistic visual elements (cartoonish looking) of the prototype can be distracting. Overall, participants suggested that a fruitful avenue to pursue would be to develop game with a realistic-feel that served as a stockpersonship training tool, expressing the sentiment that being able to spot disease early was more critical and challenging than knowing how to treat it.
+
+### Phase 2: Development of first playable prototype (Where's Woolly?)
+
+Building on the findings of the first phase, in the second phase we focused on developing a more higher-fidelity prototype game focusing on stockpersonship within a sheep farming context (given that the stakeholders we were engaging had shared experience working with sheep). The game was loosely intended to support antibiotic stewardship in agriculture by providing an environment for testing, honing and studying farmers' ability to recognise the early signs of ill health in their livestock - though we remained open to other potential uses of the game throughout our evaluation process (the results of which we report here).
+
+The prototype we developed (prototype 3) was a game in which players were presented with three scenarios of identifying sick sheep in a flock e.g. spotting animals that were walking slower than other animals, or sitting apart from the flock, or not eating. Scenarios were helpful to illustrate the potential and future use of the game as well as to gather feedback and identify potential problems [@bødker2000]. To add more realism to the game, this prototype was created using the Unity development platform [@unitytechnologies2015] that facilitated the creation of a 3D virtual environment containing more details such as a grassy terrain, bushes, trees, and more realistic models of the animals (in this case we used an existing sheep model ('asset') considering the previous feedback). Six participants including the 4 interdisciplinary team members and a farmer, and a veterinarian were asked to play and provide feedback using a think aloud approach [@nørgaard2006], and have a general discussion after their exploration (e.g., was it enjoyable? was the goal of the game clear? etc.). Notes were taken during these sessions but no formal qualitative analysis was conducted.
+
+Participants provided positive comments about the game's potential for training and research, but also highlighted the need for the game to be more realistic. For example, participants suggested that we seek to include in the game more sheep showing subtle symptoms and provide feedback on whether the animal was treated correctly. Participants also suggested that we include an introduction screen to explain the different roles and game actions to the players as well as different camera angles. Overall, participants recognised the game's potential to improve livestock health management, especially as an educational tool for inexperienced farmers.
+
+### Phase 3: Development of final prototype (The Lameness game)
+
+Building on the results of phase 2, we chose to develop a game focused on lameness recognition in sheep farmers. Lameness was chosen as the theme of the final prototype not only because it provided a focal point for developing a more realistic game, but because it was closely intertwined with stockpersonship, resonated with many of the (mainly sheep and cattle) farmers and vets we consulted, and is a key challenge in UK livestock farming with wide-ranging implications for productivity, welfare and antibiotic stewardship.
+
+For the development of the final prototype that was evaluated in this study, we first enrolled an animator (TL) with experience with scientific animation to work with our game programmer (OM), focusing on developing a realistic animation of lame and non-lame sheep which could form the basis of a game to test farmers' lameness recognition skills. This was done through a mix of consulting scientific source materials, written and video, mainly from @kaler2008, scientific experts and producing our own reference material (co-author HV filming her own sheep). This information was used to modify an existing 3D sheep model and its animations purchased from the Unity Assets store [@reddeer2020], which was then integrated into the game. We created an expert advisory panel of farmers and sheep lameness academics, including some of the co-authors. The first author conducted a one-hour focus group to receive feedback on the animation, aesthetics, gameplay mechanisms and future refinements. Notes were taken during these sessions. Feedback from the advisory panel emphasized the need to improve the sheep gait animations, which we responded to by investing more time and resources into animation refinement and their smooth integration into the game.
+
+## Description of The Lameness Game
+
+The final game was built using game-programming software Unity and 3D modelling software Blender [@blenderfoundation2021] in collaboration by a game programmer (OM) and 3D artist/animator (TL) using a mix of pre-made, modified and newly-created 3D models, animations and other digital assets [@reddeer2020; @bicameralstudios2018; @lehtonen2017; @michsky2021]. The game runs standalone in a browser on desktop and laptops, preferably using the Google Chrome browser. A playable version of the game is available free of charge online (<https://wheres-woolly.itch.io/lameness-game>) and/or from the corresponding author.
+
+```{r label=gamescreenshots, echo=FALSE, fig.asp=1, fig.width=5.25, fig.cap="Screenshots of summarising the main features of the game. A) In the game, players are presented with a field of virtual sheep and the goal of observing them to identify those with a lame gait. B) Users can zoom in and select sheep, spraying them purple to mark them as lame C) At the end of the game (10 minute timer ends or users click 'Done'), users are presented with scores based on how many of the sheep they marked as lame were actually lame, as well as some related educational information."}
+
+grid::grid.raster(png::readPNG('outputs/figures/game_screenshots.png'))
+
+```
+
+Our game was a single-player, casual simulation game in which players were set the goal of identifying all of the lame sheep in a virtual flock in the shortest time possible (Figure \@ref(fig:gamescreenshots)). During gameplay, the displayed environment resembles a farm field which is occupied by virtual sheep programmed to spend most their time grazing (\~73% of the time) or standing (\~23.5% of the time), but occasionally walked (\~3.5% of the time). These parameters were intended to be somewhat reflective of estimated real-life ovine activity budgets whereby walking constitutes a minority (\~2-4%) of the total activity [@kaler2019; @bueno1979], whilst also providing a small (but not impractically small) window of opportunity to identify lame sheep within the time-frame of a relatively short game. Players could navigate the environment with game controls that resemble those of a simplified real-time strategy game; up-down-left-right to move the camera to move the camera across the field (WASD keyboard keys), camera rotate to change the direction of camera (Q & R keyboard keys) and zoom controls to change the field of view of the camera (trackpad/mouse scroll). At the start of the game, a 'healthy' or 'lame' status is randomly assigned to each of the 24 sheep in the flock (i.e. approximately 50% of the sheep are lame, though this was not disclosed to the player), which determines the animation used when they walk (Figure \@ref(fig:gamescreenshots)A). In our game, lame sheep exhibited a shortened stride on one (infected) leg, a quickened stride on the opposite leg, and a slight nodding of the head - approximating the signs of early lameness represented by Score 2 on the scale. When players identified a sheep they thought was lame, they could select it by clicking it with the left mouse button, upon which an icon appeared above the sheep's body that the users could click to mark the sheep as lame (Figure \@ref(fig:gamescreenshots)B). The sheep was then marked with a purple spray and its status changed to 'Marked as Lame' for the purposes of the in-game scoring system. At the end of the game, users received a score for their Accuracy (% of sheep marked that were actually lame) and Recall (% of the total number of lame sheep that were marked as lame), some educational feedback on their performance, as well as the time remaining on the in-game clock (Figure \@ref(fig:gamescreenshots)C). Players were given a maximum of ten minutes to identify the lame sheep, but could choose to terminate the game and get their results early by clicking 'Done'. Participants shared their scores (those presented via the screen shown in Figure \@ref(fig:gamescreenshots)C) alongside feedback on the game via an after-game questionnaire, the results of which form the basis of this study.
+
+Although we were open to finding new potential uses of the game in our evaluation of it (see below), we designed it with two potential uses in mind (based on the feedback from the human-centered design process). Firstly, we envisaged that the game might serve an educational purpose; specifically; as a training environment for honing the skill of identifying lame sheep at the earliest opportunity. Secondly, we envisaged that the game might serve as a 'virtual laboratory' environment, providing academics a space in which they could study how farmers recognise lameness and understand the drivers behind their differing abilities. These two potential uses shaped the design of our evaluation of the game, though we made sure to also allow room for new potential uses to emerge.
+
+## Evaluation of The Lameness Game
+
+The game was evaluated via a online study in which those with and without agricultural experience were invited to play the game online and fill in an after-game questionnaire via the Microsoft Forms platform. Participants were enrolled in the study by advertising it on social media and private mailing lists (targeting groups of interest where possible e.g. sheep societies), as well as during a workshop with University of Bristol Farm Animal Discussion Group (comprising veterinary practitioners, teaching staff and researchers). Participation was incentivised by offering participants entry into a lottery to win one of three £50 vouchers for an online farm supplies shop in return for the approximately 30 minutes of participation time. This study was approved by the College of Medicine and Health research ethics committee at the University of Exeter (application number 21/01/275). To comply with ethical requirements, participants were required to read an information sheet and digitally sign a consent form before participating in the study.
+
+### Expert feedback on the game
+
+A Likert Scale questionnaire and open-form feedback was used for direct evaluation by the online study participants. We limited the collection of this data to participants who had worked in farming or a related field (hereafter 'experts'), because we deemed their feedback to be most valuable in evaluating the game. In the Likert Scale questionnaire, participants rated the game on such factors as its educational, realism and entertainment value. Open-form feedback provided an opportunity for participants to elaborate on their thoughts about the game. Open-form feedback data was analysed using thematic analysis, a qualitative analytical technique that involves searching across a dataset to identify, analyse and report repeated patterns [@braun2006]. We conducted thematic analysis on free-text feedback provided by the expert participants (n = 19, from the total of `r sum(studydata_formatted$farmingexp_YN=='Yes')` experts). Statements were coded and then reported in terms of themes, each consisting of one or multiple conceptually linked sub-themes. Supporting quotes were noted to illustrate each sub-theme. Analysis was initially conducted independently by two researchers (MSB and NVD). Any discrepancies (e.g. disagreements in assignment of comments to themes, comments fitting more than one theme) were initially discussed between these two researchers then an agreed analysis was circulated to three further researchers (MLJ, RH and AM) for peer validation, feedback and finalisation.
+
+### Participant performance in the game and its relationship to real-life experience
+
+Indirect evaluation of the game was performed via a statistical analysis of participants' in-game performance (i.e. scores) alongside information they provided about their real-life experience and how they played the game. This analysis was performed in the R programming language [@rcoreteam2017] implemented via RStudio [@rstudioteam2020], with the goal of understanding whether people were able to transfer real-life skills and experience into the game environment. This was intended to provide an independent evaluation of whether the game could be used for purposes such as training, testing or studying real-life lameness recognition practices, complementing the qualitative evaluation. Specifically, we sought to create a feasible statistical model describing what (if anything) affected participants' self-reported Recall scores in our study. Recall (i.e. % of the total lame sheep in the flock that they marked) was chosen over Accuracy (i.e. % of sheep they marked as lame that were actually lame) as the response variable of interest, because participants' Accuracy scores were heavily negatively skewed whilst the Recall scores were much more normally distributed (Supplementary Figure \@ref(fig:accuracyvsRecall)). Recall therefore appeared to be a more relevant and practical-to-analyse measure of participants' performance, because the data suggested that most participants could accurately identify some lame sheep, but the total number of lame sheep they were able to identify during the game varied. Given Recall was limited to the range 1-100%, it was arcsine-transformed before inclusion in statistical models.
+
+Our null hypothesis (H0) for the analyses was that our measured variable(s) did not affect participants' Recall, whilst our alternative hypotheses (H1, H2, H3) was that one or more measured variable(s) did affect participants' Recall. Using a post-hoc power analysis accounting for our sample size (n = `r nrow(studydata_formatted)`), assuming stringent `r power_analysis$power*100`% power and `r power_analysis$sig.level*100` significance thresholds, and the use of a linear model with `r power_analysis$u` on `r power_analysis$v` degrees of freedom (i.e. a single continuous or two-factor explanatory e.g. true-false type variable), we estimated that our study had the power to detect an approximately 'medium-to-large sized' effect (f2 = `r power_analysis$f2`), sensu @cohen1977. Given the lack of information regarding the expected effect size in our study due to the lack of previous similar studies, we opted not to further reduce our power to detect effects by trying to create a complex model. Instead, we sought to build a feasible statistical model with one explanatory variable describing what drove participants' ability to identify lame sheep in the game. In order to select a feasible model, we progressed from the more academically interesting hypotheses that participants' in-game scores were related to their real-life farming experience (e.g. whether participants had worked in farming or a related field) and gameplay strategy (e.g. signs looked for), through to the hypothesis that in-game scores were the result of more idiosyncratic factors to do with user engagement (e.g. time spent playing, computer set-up). The specific variables relating to these three alternative hypotheses that were used as explanatory variables were selected using exploratory plotting of the data, stopping when a feasible model was identified (i.e. p-value \< 0.05).
+
+# Results
+
+## Study participants
+
+A total of `r nrow(studydata_formatted)` people participated in the study; `r sum(studydata_formatted$farmingexp_YN=='No')` had not worked in farming or a related field, and `r sum(studydata_formatted$farmingexp_YN=='Yes')` had worked in farming or a related field. Of those with farming experience, the majority (`r length(grep('Farmer|Stockman/woman/person|Veterinarian|Other',studydata_formatted$sheeproles_type))`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`) had worked with sheep either as farmers (`r length(grep('Farmer',studydata_formatted$sheeproles_type))`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`), stockpeople (`r length(grep('Stockman/woman/person',studydata_formatted$sheeproles_type))`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`), veterinarians (`r length(grep('Veterinarian',studydata_formatted$sheeproles_type))`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`), or in other roles (`r length(grep('Other',studydata_formatted$sheeproles_type))`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`) such as livestock technicians or in agricultural research or policy (N.B. individual participants often had experience in multiple fields, hence numbers do not total `r sum(studydata_formatted$farmingexp_YN=='Yes')`). Most of those (`r sum(studydata_formatted$sheeplamenessexp_prev%in%c('Between 2 and 5%', 'Between 2 and 5%', 'Between 5 and 10%'))`/`r sum(!is.na(studydata_formatted$sheeplamenessexp_prev))`) who had worked with sheep stated that they had experienced moderate annual lameness levels of between 2-10% in the flocks with which they had worked.
+
+```{r label=likertplot, echo=FALSE, fig.asp=1, fig.width=5.25,fig.cap="Quantitative feedback given on the game via a Likert Scale questionnaire. Statement rated are shown on the rows, with the total percentages of participants with farming experience responding negatively, neutrally and positively to the statements overlayed on the stacked bar graph."}
+
+grid::grid.raster(tiff::readTIFF('outputs/figures/likertplot.tiff'))
+```
+
+## Participant Feedback
+
+### Feedback received via the Likert-Scale Questionnaire
+
+Feedback from a Likert-Scale questionnaire suggested that the `r sum(studydata_formatted$farmingexp_YN=='Yes')` participants with real-life farming expertise could see the potential of games like ours as professional training-type tools in agriculture, but were unsure whether our prototype had realised this potential fully (Figure \@ref(fig:likertplot)). The majority considered the game to be relevant to their profession (87%) and interests (81%), easy to understand (87%) and to learn to play (77%). Most respondents also felt that the contents and structure of the game made them confident they would learn with the game (71%), that the game offered an appropriate level of challenge (68%), and expressed that they had some fun playing (61%). However, many participants appeared to find the game boring by the end of playing; expressing that they felt the game became monotonous as it progressed (55%) and not recommending it as a form of entertainment (48%). The game was not deemed particularly absorbing, as reflected by the fact that most participants did not lose track of time (77%) or forget about their immediate surroundings (58%) while playing the game. Furthermore, there were mixed views regarding the extent to which the game was a realistic simulation of real-life sheep lameness recognition in the field (45% thought it was not, 39% thought it was, 13% were neutral).
+
+### Feedback received as open-form responses
+
+`r sum(!is.na(studydata_formatted$Please.share.any.general.feedback.main.thoughts.after.playing.the.game.below.))` out of `r sum(studydata_formatted$farmingexp_YN=='Yes')` participants with real-life farming experience provided additional free-text feedback (alongside the Likert scale feedback). During the thematic analysis [@braun2006] of these responses, five key themes emerged: the perceived realism of the game, reflective experiences, challenges of playing the simulation game, emotional responses to the game, and participants' suggestions for improvement.
+
+#### Perceived realism of the game
+
+Participants with agricultural experience commented on their perceptions of how realistic the game was as a simulation of real-life experiences with sheep on the farm. Opinion regarding the realism of the simulation was split, with some participants considering that the simulation was "*really realistic*" and "*mimicked sheep well*", and others expressing that they thought our animations were not sufficiently realistic to enable them to apply their real-life experience of spotting lameness in the game. For example, one participant simply remarked that the simulation was "*not realistic*", while another noted in particular that "*the main issue was the unrealistic movement of the feet on the ground while standing*" - an animation bug that was known to researchers, but considered minor and impractical to fix before study initiation given timeframe/budget available.
+
+#### Technical challenges playing the simulation game
+
+Participants with agricultural experience commented on a range of technical challenges relating to the game simulation that hindered their ability to engage with and benefit from the game. Four different aspects were identified as sub-themes: lack of movement of the sheep; simple, unnatural and confusing game simulation of sheep behaviour; inability to mark non-lame sheep; usability and animation/simulation issues.
+
+The first sub-theme, the lack of movement of the sheep, concerned the perceived staticness of the digital sheep and the inability of the player to affect it. Additionally, we considered that the challenge of spotting very subtle signs of lameness efficiently when only presented with glimpses of the behaviour was a key skill to early identification of lameness in the flock. However, as one participant observed, "*lameness is not often identified when animals are static in the field, more often when animals are being moved or handled*". A key issue for participants appeared to be that that we did not fully simulate the real-life behaviour of farmers "*working the flock*", whereby the farmer or stockperson moves around and through to flock to stimulate sheep movement: "*I think most farmers would say that they also assess lameness by making the sheep walk / move away from them rather than just wait until they walk*".
+
+The second sub-theme, the 'simple, unnatural, and confusing game simulation', concerned distractions brought about by the games' computational performance as a consequence of the perceived realism of the game previously described. Commenting on the 'foot slide' bug, one participant noted that while "*the sheep animations are good, but to a trained eye I found them confusing, e.g. none of them stood grazing in a normal posture because they were all jiggling their legs all the time*". In addition to the 'foot slide' bug, there were other technical challenges such as game lag and stilted movement, reflecting limitations of the technical systems involved in presenting the game to players online. For example, one participant commented that it was "*sometimes difficult to tell if a normal movement of sheep was a game lag*", while another considered that the "*movement [was] stilted which made identifying slightly lame sheep virtually impossible*". The third sub-theme was the inability to mark non-lame sheep. The fact that there was no means to mark non-lame sheep in the game made it more difficult for participants to remember which sheep they had already assessed, though this was also an intentional design choice. We omitted this feature after discussion with our advisory board, because we considered that in real-life situations of assessing lameness, only lame sheep are usually marked. However, including this feature may have offered a way to offset the limitations associated with the inability to actively work the flock. One participant's comment composed this theme, mirroring the difficult compromise between playability and realism that we encountered when designing the game: "*It was a bit frustrating not to be able to mark non-lame sheep when surveying, but that is more realistic and requires strategy*".
+
+The last sub-theme concerned usability and animation/simulation issues. A lack of smoothness in game animations was commented on in particular by one participant who noted that this issue made "*the distinction between a normal walking gait and a limp less easy to discern*". Meanwhile, another participant noted a lack of clarity in the graphics, which meant "*it was hard to see if they were holding a leg slightly up*". Another participant also mentioned the 'foot slide' bug, which was commonly commented on by participants from a range of perspectives, as reflected in the previous sub-themes.
+
+#### Emotional responses to the game
+
+Experts frequently used the open-form feedback request to express how they felt playing the game, with the 5 key sub-themes emerging in thematic analysis: enjoyment, interest, boredom, frustration, and lack of appeal.
+
+Some participants express positive feelings about the game such as enjoyment (sub-theme 1), saying that they "*enjoyed the game*" and found it "*entertaining*". Others expressed interest in the game (sub-theme 2), with one commenting that it was "*interesting to be looking for signs in virtual sheep*" and another that they "*thought this was brilliant*".
+
+However, some participants also expressed negative feelings toward playing the game. Boredom (sub-theme 3) and frustration (sub-theme 4) were expressed, and appeared to be mostly related to the staticness of the sheep and their inability to affect it (theme 3: sub-theme 1). For example, one participant noted that they became "*bored waiting for the sheep to move*", and similarly others commented that the game was "*frustrating*" or "*very frustrating*" to play (sub-theme 4), with one noting explicitly that the cause of their frustration was "*waiting for the sheep to move*". In addition, one participant expressed a more general lack of appeal (sub-theme 5), such as "*This sort of game doesn't appeal to me I'm afraid. I've always worked in the real world*".
+
+#### Reflective experiences
+
+Agricultural experts also reflected on the experience of playing the game and the strategies they employed to identify lame sheep. For example, one participant emphasised how the game "*allowed me to get a better sense of my knowledge and skills*", reinforcing how the game could enable participants to take stock of their current stockpersonship skills, and serve as a useful benchmarking exercise. However, others found the game too easy as one participant commented that "*lame sheep aren't always that easy to spot in a field*", while another commented that "I *think most sheep farmers know the signs of lameness*". Considering strategies, participants mentioned that in real life, it was important to "*walk around the flock*", and noted that the sheep "*would move*" in response to the farmer's movements in a more realistic setting.
+
+#### Participants' suggestions for improvement
+
+Participants also offered suggestions for improvement to the game or to inform future games in this field. These suggestions fell into two broad categories.
+
+Firstly, in line with other feedback, there were suggestions relating to making sheep move, e.g. using additional mechanisms and characters. Creating more natural movement patterns, rather than just a realistic gait, was considered an important priority for future improvement. Participants offered a range of perspectives on how to make the sheep move, but a common view was that it was important to be able to actively move the sheep, as a farmer would in a real-life field, rather than passively waiting for the sheep to move in order to be able to assess gait, as in the current game. For example, one participant suggested: "*If there was a way to make each sheep move, that would really help to keep engagement*". Meanwhile, another participant suggested adding a sheep dog character to "*run round*" the sheep, while another suggested "*walking a person around so they [the sheep] walk away from you*". It was commonly agreed that active flock management would be needed for the game experience to be realistic.
+
+Secondly, other participants suggested providing additional visual or sound feedback in the game. One participant commented that visual feedback could be reinforced by offering a "*slightly more realistic depiction of sheep movement for non-lame sheep*", while another participant considered that auditory feedback regarding the correct identification of a lame sheep, "*maybe a sound...as you chose the correct animals*", could be a useful addition.
+
+## Participant performance
+
+### Farming experience
+
+There was no evidence that real-life farming experience affected players' in-game performance (Figure \@ref(fig:farmingexperience)). Those who had not worked in farming or a related field (n = `r sum(studydata_formatted$farmingexp_YN=='No')`) identified a similar percentage of the lame sheep in the game (i.e. Recall) as those who had worked in such fields (n = `r sum(studydata_formatted$farmingexp_YN=='Yes')`). A statistical model confirmed this and was therefore rejected (Farming Experience model; R^2^~adj~=`r summary(farmingexperience_model)$r.squared`, p-value = `r format.pval(summary(farmingexperience_model)$coefficients[2,4],eps=0.01)`, F =`r summary(farmingexperience_model)$fstatistic[1]`, `r summary(farmingexperience_model)$fstatistic[2]` on `r summary(farmingexperience_model)$fstatistic[3]` DF; Supplementary Figure \@ref(fig:fitfarmingexperience)).
+
+Among those with farming experience, more specific experience with lameness and sheep also appeared to be weakly related to in-game Recall. The Recall scores of those who had experienced relatively high levels of lameness in the real-life sheep flocks with which they had worked (self-assessed) did not differ obviously from those who perceived that they had experienced lower levels. Number of years working with sheep did not appear to be related to players' Recall scores in the game.
+
+\newpage
+
+```{r farmingexperience, echo=FALSE, fig.width=5.25, fig.height=3.25, fig.cap="Relationships between participants’ Recall scores and their real-life farming experience. A) Recall scores of those without (blue) and with farming experience (pink); B) Recall scores according to the perceived levels of lameness experienced in real-life flocks by participants with real-life farming experience; C) Recall scores and years of real-life farming experience spent working with sheep. Notches (indentations) in box plots represent the 95% confidience interval around the median (overlap suggests no significant difference between the two distributions). Where the notches go outside the hinges (lower/upper bounds; 1st and 3rd quartile) of the box, it indicates that the estimated median may not be accurate."}
+
+grid::grid.raster(tiff::readTIFF('outputs/figures/farmingexperience.tiff'))
+
+```
+
+### Lameness signs looked for
+
+Although a higher proportion of those with real-life farming experience (Figure \@ref(fig:signs); pink points) looked for the correct real-life lameness signs in the game compared to those without farming experience (Figure \@ref(fig:signs); blue points), this did not translate into higher Recall scores. All of the relationships between the signs participants looked for and the in-game Recall scores they achieved were very weak. The most obvious relationships were that participants who looked for differing leg speeds (i.e. a limp) scored higher, whilst those who looked for sheep unable to bear weight on a leg whilst standing (a sign of more advanced lameness which was not included in our animation of early lameness) scored lower.
+
+However, neither looking for a limp (Limp model; R^2^~adj~=`r summary(sign_limp_model)$r.squared`, p-value = `r format.pval(summary(sign_limp_model)$coefficients[2,4], eps=0.01)`, F =`r summary(sign_limp_model)$fstatistic[1]`, `r summary(sign_limp_model)$fstatistic[2]` on `r summary(sign_limp_model)$fstatistic[3]` DF; Supplementary Figure \@ref(fig:fitlimp)) nor looking for a raised leg (Raised Leg model; R^2^~adj~=`r summary(sign_raisedleg_model)$r.squared`, p-value = `r format.pval(summary(sign_raisedleg_model)$coefficients[2,4], eps=0.01)`, F =`r summary(sign_raisedleg_model)$fstatistic[1]`, `r summary(sign_raisedleg_model)$fstatistic[2]` on `r summary(sign_raisedleg_model)$fstatistic[3]` DF; Supplementary Figure \@ref(fig:fitraisedleg)) were predictive of participants' Recall scores according to a linear model. Furthermore, other signs included in the animation such as uneven posture and nodding of the head (which we deemed to be the most obvious sign of lameness in the game) did not appear related to participants' Recall scores - providing further evidence that what signs participants looked for did not affect their scores. For several signs, the number of participants looking or not looking for the sign was too small to accurately compare the two mean Recall scores (notches outside hinges in box plot boxes).
+
+\newpage
+
+```{r signs, echo=FALSE, fig.asp=1, fig.width=6.25, fig.cap="Relationship between participants’ Recall scores and the signs they looked for when playing the simulation game. Recall scores of participants that did not and did look for each of 8 classic signs of various stages of lameness (sensu Kaler and Green 2008), plus an extra category of ‘Other’ signs looked for which we asked participants to elaborate upon (see Supplementary Materials 3 for details). Blue points are participants with farming experience (n = 31), pink points are those with farming experience (n = 32). Notches (indentations) in box plots represent the 95% confidience interval around the median (overlap suggests no significant difference between the two distributions). Where the notches go outside the hinges (lower/upper bounds; 1st and 3rd quartile) of the box, it indicates that the estimated median may not be accurate."}
+
+grid::grid.raster(tiff::readTIFF('outputs/figures/symptoms.tiff'))
+
+```
+
+\newpage
+
+```{r userengagement, echo=FALSE, fig.width=6.25, fig.cap="Recall scores of participants according to A) whether participant had problems using the game controls; B) Whether participant observed the sheep up-close, from afar and then zooming in, or using another strategy (e.g. combination of the two); C) How the participant navigated the virtual field to identify sheep; D) Whether the participant completed the pre-game tutorial; E) The participant's computer set-up/pointing device; F) The time the participant spent playing the game. Blue points are participants with farming experience (n = 31), pink points are those with farming experience (n = 32).Notches (indentations) in box plots represent the 95% confidience interval around the median (overlap suggests no significant difference between the two distributions). Where the notches go outside the hinges (lower/upper bounds; 1st and 3rd quartile) of the box, it indicates that the estimated median may not be accurate."}
+
+grid::grid.raster(tiff::readTIFF('outputs/figures/UE.tiff'))
+
+```
+
+### User engagement
+
+Stronger relationships were observed between components of participants' user engagement and their Recall scores (Figure \@ref(fig:userengagement)). Most notably, the time spent playing appeared to be positively and linearly related to in-game Recall, and a linear model of this effect indicated that it had more explanatory power than other variables considered (User Engagement model; R^2^~adj~=`r summary(userengagement_model)$r.squared`, p-value = `r format.pval(summary(userengagement_model)$coefficients[2,4],eps=0.01)`, F =`r summary(userengagement_model)$fstatistic[1]`, `r summary(userengagement_model)$fstatistic[2]` on `r summary(userengagement_model)$fstatistic[3]` DF; Supplementary Figure \@ref(fig:fitUE)). Specifically, within the range playing lengths observed (1.45-10 minutes with no obvious difference according to participants' real-life farming experience), participants identified an average of 2 additional sheep for every additional minute played. The pointing device (e.g. mouse, trackpad) participants used when playing the game also appeared to be related to their score, with participants using a computer mouse scoring higher than those who used a laptop. However, given that for several participants it was unclear what device they used, we did not analyse this potential effect further. Participants' assessment of whether they had problems with the controls was not related to their Recall score, and neither was their strategy of interacting with the in-game flock; there was no evidence that how participants observed or moved around the virtual flock affected performance.
+
+# Discussion
+
+Our online evaluation study highlighted the challenges and opportunities of using simulation games for the purposes of supporting real-life farming practices. Whilst our study did produce some signs of potential for using simulation video games in this context in the form of positive feedback from participants, barriers to this audiences' user engagement with computer games like ours appeared to hinder this potential from manifesting more widely. In particular, the difficulties of achieving a very high level of realism and engagingness in the game's design appeared to hinder its ability to produce results that were likely to be more relevant to real-life farming practices. Nonetheless, as an exploratory study the results provide valuable insights for the design and use of future similar games and studies in agriculture
+
+## User engagement shapes in-game performance where participants struggle to relate to the simulated environment
+
+Reflecting on participants in-game performance in the final prototype, we conclude that we were not able to produce a game realistic enough to allow real-life farming experience and skills to be translated into in-game skills. Rather, the only driver of participants' in-game performance that we identified was the time they spent playing, which was also related to another problem with the game design/execution - its lack of engagingness. These conclusions are well-supported by qualitative analysis of the open-form feedback that participants provided on the game.
+
+Regarding realism, an important point to make is that our pursuit of realism was heavily motivated by early interviews with potential users from agricultural backgrounds. Although our sample size of potential users was small and may not be reflective of all the potential users of such games, there was a consistent feeling among interviewees that a research/education game of this sort should reflect real-life scenarios as accurately as possible. This fundamentally shaped the project and ultimately, the difficulties we faced in achieving the desired level of 'realism' limited the game's potential as tool for training or assessing farmers' lameness recognition skills direct. Partly, this was due to us significantly underestimating the complexity of accurately animating an animal's gait and the variety of body language cues that farmers are processing when they observe a sheep gait. An animation that was 'realistic enough' for a lay-person who lacked real-life agricultural experience, was likely highly unrealistic in the eyes of someone who has spent years observing sheep. More time spent refining animations and their in-game performance in consultation with farmers (enabled by a larger budget) may have resolved some of the major stumbling blocks around realism to produce more insightful results. However, it is also very possible that there is not a 'technological fix' for this problem, and that pursuing realism will always produce unsatisfactory result. Arguably, realism itself is a nebulous and subjective concept, with no obvious consensus on what constitutes realistic, and no obvious end-point. This may work in the gaming industry due to the greater ability to achieve realism and/or the fact that its entertainment-oriented audience are more able to suspend their disbelief in order to enjoy doing things they could not in real life. However, in small academic studies seeking to use games to study occupational decision making, the players may instead exhibit a completely justified protective bias for the intricacies and complexities of their craft, and as such may resist the concept of simplifying their experience and intuition into a video game. Such dynamics present a profound challenge for the use of serious games in areas such as livestock health.
+
+```{=html}
+<!-- Participants simply could not relate to the virtual animals in the video game in the way they related to those in real life - and thus at best were only able to engage with the game on a superficial level, and at worst found it a pointless exercise
+... -->
+```
+<!-- To be sure, we do not think at all that the pursuit of realism was the wrong choice, or that our failure to reach the necessary level of realism was due to lack of skill in our team - realism is clearly important to this audience (as the questionnaire responses reaffirm), and our team had expertise in game programming, scientific animation and sheep gait analysis. However, we do think that we significantly underestimated the complexity of accurately animating something like a sheep gait and the huge amount of body language that farmers are processing when they observe a sheep gait. An animation that was 'realistic enough' for the main members of our team who lacked real-life agricultural experience was likely very unrealistic to the eyes of someone who has spent years observing sheep. A larger budget and associated with this, more time spent refining animations and their in-game performance in consultation with farmers, might have resolved some of the major stumbling blocks around realism to produce more insightful results. -->
+
+Regarding engagingness, some participants expressed boredom or frustration in the after-game feedback, and probably related to this, many quit the game early (reflected by the wide range of times spent playing in Figure \@ref(fig:userengagement)). Again, this was partly related to realism; both in the sense of our struggle to achieve the levels expected by participants (as borne out by the thematic analysis) and in the sense that in our pursuit of realism, we probably made the game overly long and sacrificed entertainment value. To be sure, we had not primarily intended to create a 'fun' game in our project, especially as having an overemphasis on the "fun factor" can be detrimental to the use of games in non-gaming contexts like agriculture [@monk2002]. However, game-based approaches must still achieve a user experience that is to some extent playful and engaging [@treiblmaier2018], especially many people hold preconceived notions that video games are always designed for the purpose of entertainment. One major way in which our pursuit of realism limited the entertainment value of our game was in our programming of sheep behavior. Given sheep walk only intermittently, we opted to make the game 10 minutes long to ensure participants had an opportunity to observe each of the 25 sheep in the virtual flock walking at least once. Especially considering that the game consisted of repeating one task, this left much scope for participant drop-out - highlighting the need to pursue entertainment factor even as ones pursue realism when designing games for research and education, which established game studios may be better placed to achieve [@crowley2021]. The lack of engagingness of the game was also related to more technical problems around in-game 'bugs' or problems engaging with the virtual flock. Again reflective of the minutiae of signals that farmers process when trying to recognise lameness, in-game malfunctions such as the foot-sliding 'bug' which we mistakenly thought would be relatively inconsequential and not a priority (in terms what was feasible given the predetermined project budget and time frame) to fix before the study roll-out, turned out to be quite distracting for some participants. More generally, the inability to move the virtual sheep and 'work the flock' was frustrating for some participants, who expressed that passive observation was not an efficient way to identify lameness. We thus recommend further engagement with farmers when creating these types of games and studies, extending the iterative process of human-centered design that we deployed.
+
+Finally, we would like to (re)emphasise the importance of budgetary limitations in limiting our ability to achieve the levels of realism and engagingness that participants expected. Despite introducing the game as a prototype, participants appeared to have high expectations and consider the game as a finished game product, critiquing it as such. Although we worked with a skilled game programmer and animator experienced in scientific animation in developing our game, we were not always able to make the most of their skills due to the limitations of our very small £5000 budget (Supplementary Materials \@ref(fig:budget)). Not only did this limit the time we had to hire the game creators for this challenging task, but it also limited our ability to hire someone with subject-specific expertise (e.g. a sheep farmer) to closely supervise the process of game and animation development. Our animator noted that although the research team communicated information from farmers (including co-authors HV and ME) to them, there was no sheep farmer directly available to them to provide day-to-day feedback. Furthermore, our game programmers were not always able to make use of the feedback and support that was available from the review and testing stages (e.g. addressing boredom issues or the 'foot slide' bug) because funding ran out. We therefore strongly recommend that future grant applications for projects of this sort seek substantially more funding, in order to facilitate much closer, more direct collaboration between the game developers and the end-users, and to pay for their time (we provide our budget in Supplementary Materials \@ref(fig:budget) as a guide for future projects). This would enable design choices to be driven by users involvement and not by what it can be feasible due to budget restrictions/constraints, increasing game acceptance and the potential benefits of this medium.
+
+## Positive effects of the game/study
+
+Despite the challenges we encountered in the design and use of this game, it nonetheless produced evidence of future potential. As well as positive feedback expressed by some participants, there were more subtle signs of potential.
+
+On the most basic level, the game-based, incentivised study appeared to function well as a 'hook' to encourage agriculturalists to discuss and participate in a more conventional survey about managing animal health, and anecdotally at least, some agriculturalists suggested that the novelty of using a game made the study more appealing (especially when compared to solely survey-based studies that they often get requests to participate in). The game also supported experiential learning through reflection and facilitated the acquisition of up-to-date information on lameness recognition in UK farmers. Agriculturalists were clearly at least trying to spot lameness in the virtual sheep as they would for real-life sheep, and some explicitly expressed that it allowed them to take stock of their real-life practice. The fact that most participants who looked for the classical lameness signs were agriculturalists (Figure \@ref(fig:signs); pink points) suggests that most UK farmers in 2021 still knew how to identify lameness, as ascertained previously [@kaler2008]. New sociological tools like games may therefore at least help facilitate survey methods and encourage more active participation and engagement between farmers and researchers, as well as support learning through reflection.
+
+Furthermore, some of our results suggest that the game produced a level of understanding that would not have been so easily achieved with solely survey-based methods, allowing farmers to engage with researchers in novel ways. In particular, we note that the process of researchers illustrating (through the creation of a game) their 'vision' of what lameness recognition on the farm looks like - and requesting feedback from experts on this - facilitated conversations about lameness that perhaps may not have happened with solely survey-based methods, one of the main benefits of the human-centered design approach. Participants reacted strongly to the artificial, simplified world we created, telling us what was missing from our vision and highlighting the limitations of our understanding as academics, proving the utility of iterative prototyping [@lim2008]. As previously mentioned, a notable example of this was experts questioning our assumption that early lameness recognition depended on passive observation and making clear that it depends on actively 'working the flock'. Similarly, participant feedback and performance data suggesting that the game easy revealed how academics might misdiagnose real-life problems (and by implication, prescribe flawed solutions); revealing that the decision-making challenge in lameness management may not lie in being able to recognise lameness early, but in being able to act upon this knowledge accordingly (e.g. in finding time and resources to catch and treat sheep). Such assumptions may not have been obvious in a less creative, interdisciplinary project, and has implications for managing lameness in the real-world; suggesting that finding ways to embed lameness reflection and monitoring into existing shepherding practices might help reduce lameness more than trying teach farmers the signs of lameness.
+
+## Implications for use of games in agricultural research
+
+Our findings have important implications for the future development of games intended as tools to engage with farmers on issues such as lameness, stockpersonship and livestock health management practices more generally. In particular, they demonstrate that future agricultural gaming projects should consider carefully whether the levels of both realism and engagingness that we expect farming audiences to demand of this sort of game are achievable, or necessary, before initiating the project. Much effort (working closely with potential users) went into producing a game that was ultimately considered too unrealistic and unengaging to be worthwhile by the majority of our target audience, questioning the benefit of this approach relative to its cost. This said, future projects with more budget, resources and experience may be more able to overcome the challenges of the medium, and identify its full potential as a tool for addressing livestock health issues such as lameness. Building on existing games (rather than creating them anew) may also be a more effective approach to uncover the potential of this medium. Given that high quality video games are now widely accessible in society, professional video game studios and their games are far more able to meet audience expectations than a team of academics, and academics could potentially re-purpose these games to save resources and achieve better engagement with stakeholders. This understanding motivated a recent study that used the video game Red Dead Redemption 2, which exploited the game's established popularity, realism and entertainment value to successfully demonstrate the educational value of games in learning natural history [@crowley2021]. The hyper-real popular video game Farming Simulator, which is already played by farmers [@lane2018], might serve a similar role in future studies of games in agriculture, and indeed @pavlenko2021 have already had some success building a 'mod' for this game to encourage the adoption of precision agriculture technologies. Alternatively, future projects might do better to use real-life imagery rather than 2/3D models to simulate agricultural environments; this ethos is already being successfully deployed by the '3D farms' project centered around virtual reality to overcome logistically and accessibility challenges in agricultural training [@barber2016]. In all of these approaches though, academics should consider carefully the limits of their own experiences and understanding compared to that of farmers, and the limits to which games can replace on-the-farm training and research.
+
+# Conclusions
+
+The use of games in agricultural research has been increasing in recent years and here, we attempted to develop and use a game to support study lameness recognition in UK sheep farmers. We found that besides the positive effects of the game in supporting understanding, discussion and reflection of lameness, difficulties engaging the agricultural audience limited the potential of the game for education and research. In particular, experienced livestock farmers and stockpeople requested much higher levels of realism in the game simulation than we could achieve with our project budget and time-frame. These results suggest that more needs to be done to establish whether games can be a cost-effective tool in livestock health education and research, and to explore the most effective ways and scenarios in which to use them. Future similar studies should seek to use larger budgets, build on existing agricultural simulation games, and work more directly with their target audience, in order to develop games that can more acutely address the challenges of managing livestock health in the twenty-first century.
+
+# Acknowledgements
+
+We would like to thank to all the farmers, veterinarians, academics and others who participated in the human-centered design, piloting and evaluation process to create these game and execute this study. Thank you to our advisory board who helped shape the game, animations, and study design. Thank you to the Health and Environment Public Engagement Group at University of Exeter's European Centre for Environment and Human Health, who acted as test participants before the formal roll-out of the online study. Thank you to ethics and press office staff at the University of Exeter for enabling the study to meet ethical guidelines and advertising the study in order to recruit participants. Finally, many thanks to the 63 participants who gave their time to take part in the online evaluation study, whose data forms the basis of this paper. The last author would also like to acknowledge the Centre for Artificial Intelligence, Robotics and Human-Machine Systems (IROHMS) operation C82092, part-funded by the European Regional Development Fund (ERDF) through the Welsh Government. This study was funded by the GW4 Crucible Seed Funding Award Cru20_3.
+
+# Data availability statement
+
+The anonymous data collected during the online evaluation study (the results of which are reported in this paper) are freely available in raw (direct output from MS Forms platform) and formatted (tidied using R code) formats at the lead author's Github repository (<https://github.com/befriendabacterium/lamenessgame>). R code to reproduce the analysis and figures reported in the manuscript is also deposited here. The supplementary materials of the manuscript also contain the thematic analysis of the open-form feedback in a more accessible Word document format. All participants approved the open publication of these anonymous data when signing the consent form to participate in the study.
+
+# Supplementary Information
+
+\newpage
+
+## Supplementary Materials
+
+\newpage
+
+```{r echo=FALSE, fig.id="questionnaire"}
+
+#from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
+block_caption("Questionnaire",
+              style = "Figure",
+              autonum = run_autonum(seq_id = 'suppmat', 
+                                    bkm = 'questionnaire',
+                                    pre_label = "Supplementary Materials ",
+                                    start_at=NULL))
+```
+
+**Consent**
+
+1.  By checking this box I confirm that I have understood and agree with all of the above
+
+statements and I consent to taking part in this project. You must tick this box to agree
+
+with all of the above statements, in order to part in the questionnaire.
+
+**Game Results**
+
+You will need to record your game time & scores after playing the game so please read the instructions below carefully before playing:
+
+STUDY INSTRUCTIONS:
+
+1\. Go to <https://wheres-woolly.itch.io/lameness-game,> leaving this form open
+
+2\. Play the tutorial, the afterwards play the Game itself
+
+3\. Upon finishing the game DO NOT CLOSE THE WEBPAGE - you will be shown your scores (an example screenshot is shown above) - keep it open and enter your scores in the form below, then continue with the rest of the questionnaire.
+
+REMINDER - GAME RECOMMENDATIONS:
+
+\- Desktop or laptop computer - The game should not be played on touchscreen devices (i.e. smartphone or tablet).
+
+\- Mouse with a scroll wheel or a laptop trackpad - to ensure efficient game-play.
+
+\- We recommend playing the game in one of the following web-browsers: Microsoft Edge, Google Chrome or Mozilla Firefox (other browsers are not supported)
+
+\- If the game is running slowly, try closing unused web-browser tabs (not this one)
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+2.  Time remaining on clock when you ended the game by clicking 'Done (in the format nnn seconds e.g. 596 seconds in the example screenshot).
+
+3.  Lame sheep identified (%) - e.g. 0 in the example screenshot
+
+4.  Accuracy (%) - e.g. 0 in the example screenshot
+
+5.  How many times did you play the game before getting these results (0 = it was my first time playing)?
+
+6.  Did you play the tutorial before playing the game?
+
+-   Yes, and observed the sheep walking
+
+-   Yes, but didn't observe the sheep walking
+
+-   No
+
+7.  What computer hardware did you use to play the game? (select all those appropriate)
+
+-   Laptop or Desktop computer
+
+-   Mouse with scroll-wheel
+
+-   Track-pad with pinch zoom
+
+-   Smartphone or tablet
+
+-   Other
+
+8.  Did you experience any problems using the controls or playing the game?
+
+-   Yes
+
+-   No
+
+9.  If yes, please specify
+
+**Game Strategy**
+
+10. What was your strategy for observing the sheep (tick all that apply)?
+
+-   Observed the whole flock and then zoomed in when I saw one that looked lame
+
+-   Observed each sheep up-close until I could see whether or not it had a sign, then moved onto the next sheep
+
+-   Other (please provide details below)
+
+10. Please provide brief details about your strategy for observing the sheep?
+
+11. How did you move from sheep to sheep (tick one)?
+
+-   Randomly
+
+-   Semi-randomly
+
+-   Started at one end of the flock and worked my way to the other
+
+-   Other (please provide details below)
+
+12. Please provide brief details about how you moved from sheep to sheep
+
+13. What signs did you look for to find the lame sheep (tick all that apply)
+
+-   Uneven posture
+
+-   Shortened stride on one leg when walking
+
+-   Pair of legs which were moving at different speeds
+
+-   Nodding of head
+
+-   Not weight bearing on affected leg when standing
+
+-   Not weight bearing on affected leg when walking
+
+-   Reluctance to move
+
+-   Slower walking pace
+
+-   Other
+
+14. If you answered 'Other', please provide brief details about what signs you looked for to find lame sheep
+
+**Real-world experience**
+
+15. Have you ever worked in farming or a related field (e.g. farm vet)?
+
+-   Yes
+
+-   No
+
+16. How many years have you worked with sheep?
+
+17. In what roles, if any, did you work with sheep (e.g. farmer, stockman/woman/person, veterinarian)?
+
+-   Farmer
+
+-   Stockman/woman/person
+
+-   Veterinarian
+
+-   Other
+
+18. If you answered 'Other', please provide some brief details about the role(s) in which you worked with sheep
+
+19. What do you think was the average level of lameness in the flock(s) with which you worked/work, over one year?
+
+-   Under 2%
+
+-   Between 2 and 5%
+
+-   Between 5 and 10%
+
+-   Over 10%
+
+**Game Feedback**
+
+Please fill in the table below with an indicating how strongly you agree with the preceding statement with 5 being strongly agree and 1 being strongly disagree
+
+How strongly do you agree with the following statements?
+
+1.  The game is a realistic representation of recognising sheep lameness in the field
+
+2.  Learning to play this game was easy
+
+3.  The game rules are clear and easy to understand
+
+4.  The contents and structure helped me to become confident that I would learn with this game
+
+5.  This game is appropriately challenging for me
+
+6.  The game does not become monotonous as it progresses
+
+7.  I am motivated to achieve a better score
+
+8.  Completing the game tasks gave me a satisfying feeling of accomplishment
+
+9.  It is due to my personal effort that I managed to advance in the game
+
+10. I feel satisfied with the things that I learned from the game
+
+11. I would recommend this game to my colleagues/friends
+
+12. I had fun with the game
+
+13. I would play this game again
+
+14. I would recommend this game as a form of entertainment
+
+15. I achieved the goals of the game applying my knowledge
+
+16. I would recommend this game as a form of training/educational tool
+
+17. I was so involved in my gaming task that I lost track of time
+
+18. I forgot about my immediate surroundings while playing this game
+
+19. The game contents are relevant to my interests
+
+20. It is clear to me how the contents of the game are related to my profession
+
+\newpage
+
+```{r echo=FALSE, fig.id="thematicanalysis"}
+
+#from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
+block_caption("Thematic analysis results",
+              style = "Figure",
+              autonum = run_autonum(seq_id = 'suppmat', 
+                                    bkm = 'thematicanalysis',
+                                    pre_label = "Supplementary Materials ",
+                                    start_at=NULL))
+```
+
+**List of comments for qualitative analysis (note the typing errors from the original, should mark as [cic] if quoting in text)**
+
+Participant 8: If there was a way to make each sheep move, that would really help to keep engagement, I got bored waiting for the sheep to move unfortunately.
+
+Participant 15: :) [Happy face]
+
+Participant 17: I think most farmers would ay that they also assess lameness by making the sheep walk / move away from them rather than just wait until they walk.
+
+Participant 18: If you wanted to complete the game in a shorter time, you would want the sheep to move around more. I got bored waiting for them to walk. Needs a dog to run round them!
+
+Participant 19: Game animations were not smooth, making the distinction between a normal walking gait and a limp less easy to discern. This scenario may not be very representative, as in my experience lameness is not often identified when animals are static in the field, more often when animals are being moved or handled.
+
+Participant 22: Lame sheep aren't always that easy to spot in a field
+
+Participant 24: Would be good to get sheep to move, maybe by walking a person around so they walk away from you as it is difficult to assess them systematically. .
+
+Participant 27: i got annoyed waiting for the sheep to move. in a flock i would walk around them and the sheep would move.
+
+Participant 34: The graphics werent very clear - it was hard to see if they were holding a leg slightly up. In reality you would move the sheep to look for lameness
+
+Participant 35: I would have enjoyed this game better if the controls worked better . the sheep animations are good, but to a trained eye i found them confusing , eg none of them stood grazing in a normal posture because they were all jiggling their legs all the time
+
+Participant 36: This sort of game doesn't appeal to me I'm afraid. I've always worked in the real world.
+
+Participant 38: none [Cannot include in the analysis]
+
+Participant 43: it was entertaiing but i felt there could be improvements made as you chose the right animals maybe a sound so you know your going the right way or a counter in the corner
+
+Participant 44: took a long while for the seep to start moving in the tutorial that i wondered if it was going to move, but I think that's the point of the questions asking about if I watched the sheep move. i enjoyed the game as it allowed me to get a better sense of my knowledge and skills. it mimicked sheep well but was sometimes difficult to tell if a normal movement of sheep we a game lag.
+
+Participant 50: I thought lameness was really realistic- but was expecting more variation (ie from very early to very severe, different legs, etc - though maybe I didn't spot that!)
+
+Participant 51: Found it very frustrating. Not realistic. Movement stilted which made identifying slightly lame sheep virtually impossible. Most of the time all sheep standing still, leading to frustration with the game and rushing.
+
+Participant 57: I thought this was brilliant. It was a bit frustrating not to be able to mark non-lame sheep when surveying, but that is more realistic and requires strategy. The main issue was the unrealistic movement of the feet on the ground whilst standing. On my PC there was a foot slide effect. I didn't look for standing signs as I thought they were more graphics errors
+
+Participant 67: Could be enhanced by slightly more realistic depiction of sheep movement for non-lame sheep
+
+Participant 68: It's interesting to be looking for sign in virtual sheep, but I got frustrated that I was not able to make them move as would be the case in real life.
+
+Participant 70: very basic. would be nice to have a method of encouraging sheep to move. In real life I would walk around the flock and observe they way the moved. In this game the sheep were fairly stationary which made that hard.
+
+**First reviewer's (M.S.B) comments on second reviewer's (N.V.D) analysis and points of difference**
+
+The two analyses presented are compatible to a large extent and reflect far more commonalities than fundamental points of difference. Where there were discrepancies, these reflected different professional backgrounds and differential prioritisation of aspects of the dataset, especially relating to technical versus experiential aspects.
+
+M.S.B. identified 4 themes:
+
+1\.       Challenges of identifying lameness
+
+2\.       Psychological responses
+
+3\.       Realism of farming simulation
+
+4\.       Technical performance
+
+N.V.D. identified 5 themes
+
+1\.       Perceived Realism of the Game
+
+2\.       Reflective experiences
+
+3\.       Challenges of the Game simulation
+
+4\.       Emotional Responses to the Game
+
+5\.       Participant's suggestions for improvements
+
+I consider that N.V.D has captured the content of my themes, with the following comments.
+
+M.S.B. opted to sort the themes alphabetically. N.V.D. has not stated a logic for ordering the themes. I would prefer to retain alphabetical ordering (unless a strong rationale to the contrary is provided).
+
+I would prefer to retain the theme title 'Psychological responses' rather than 'Emotional responses', but am happy to add 'to the game'. I consider that the term 'Psychological' better captures the range of sub-themes.
+
+I consider the only amendments needed to N.V.D.'s coding are to order alphabetically and to replace 'emotional' by 'psychological'
+
+**Results/themes identified**
+
+1\.       Perceived realism of the game (PR)
+
+o   Quote 1: "the sheep animations are good" (Participant 35)      
+
+o   Quote 2: "it mimicked sheep well" (Participant 44)
+
+o   Quote 3: "I thought lameness was really realistic..." (Participant 50)
+
+o   Quote 4: "Not realistic." (Participant 51)
+
+o   Quote 5: "The main issue was the unrealistic movement of the feet on the ground whilst standing" (Participant 57)
+
+2\.       Technical challenges playing the simulation game (TC)
+
+·       Sub-theme 1: Lack of movement of the sheep
+
+o   Quote 1: ": I think most farmers would say that they also assess lameness by making te sheep walk / move away from them rather than just wait until they walk" (Participant 17)
+
+o   Quote 2: "as in my experience lameness is not often identified when animals are static in the field, more often when animals are being moved or handled." (Participant 19)
+
+o   Quote 3: "I got annoyed waiting for the sheep to move. in a flock i would walk around them and the sheep would move." (Participant 27)
+
+o   Quote 4: "In reality you would move the sheep to look for lameness" (Participant 34)
+
+o   Quote 5: "took a long while for the sheep to start moving in the tutorial that i wondered if it was going to move, but I think that's the point of the questions asking about if I watched the sheep move" (Participant 44)
+
+o   Quote 6: "Most of the time all sheep standing still, leading to frustration with the game and rushing" (Participant 51)
+
+o   Quote 7: "I was not able to make them move as would be the case in real life." (Participant 68)
+
+·       Sub-theme 2: Simple, unnatural, and confusing game simulation of sheep's behaviour (SB)
+
+o   Quote 1: "the sheep animations are good, but to a trained eye i found them confusing , eg none of them stood grazing in a normal posture because they were all jiggling their legs all the time." (Participant 35)
+
+o   Quote 2: "was sometimes difficult to tell if a normal movement of sheep we a game lag." (Participant 44)
+
+o   Quote 3: "was expecting more variation (ie from very early to very severe, different legs, etc - though maybe I didn't spot that!)" (Participant 50)
+
+o   Quote 4: "Movement stilted which made identifying slightly lame sheep virtually impossible." (Participant 51)
+
+o   Quote 5: "Very basic... In this game the sheep were fairly stationary which made that hard" (Participant 70)
+
+·       Sub-theme 3: Unable to mark non-lame sheep
+
+o   Quote 1: "It was a bit frustrating not to be able to mark non-lame sheep when surveying, but that is more realistic and requires strategy." (Participant 57)
+
+·       Sub-theme 4: Usability and Animation/simulation issues (e.g., transitions, controls, graphics) (UA)
+
+o   Quote 1: "Game animations were not smooth, making the distinction between a normal walking gait and a limp less easy to discern." (Participant 19)
+
+o   Quote 2: "The graphics werent very clear - it was hard to see if they were holding a leg slightly up." (Participant 34)
+
+o   Quote 3: "would have enjoyed this game better if the this game if the controls worked better" (Participant 35)
+
+o   Quote 4: "... On my PC there was a foot slide effect. I didn't look for standing signs as I thought they were more graphics errors" (Participant 57)
+
+3\.       Emotional responses to the game (ER)
+
+·       Sub-theme 1: Enjoyment
+
+o   Quote 1: ":) [Happy face]" (Participant 15)
+
+o   Quote 2: ": it was entertaining" [Sic] (Participant 43)
+
+o   Quote 3: "I enjoyed the game" (Participant 44)
+
+·       Sub-theme 2: Surprise/interesting
+
+o   Quote 1: "I thought this was brilliant" (Participant 57)
+
+o   Quote 2: "It's interesting to be looking for sign in virtual sheep" (Participant 68)
+
+·       Sub-theme 3: Boredom
+
+o   Quote 1: "I got bored waiting for the sheep to move unfortunately" (Participant 8)
+
+o   Quote 2: "I got bored waiting for them to walk" (Participant 18)
+
+·       Sub-theme 4: Frustration
+
+o   Quote 1: "i got annoyed waiting for the sheep to move" [Sic] (Participant 27)
+
+o   Quote 2: "Found it very frustrating." (Participant 51)
+
+o   Quote 3: "But I got frustrated." (Participant 68)
+
+·       Sub-theme 5: Lack of appeal
+
+o   Quote 1: "This sort of game doesn't appeal to me I'm afraid. I've always worked in the real world." (Participant 36)
+
+4\.       Reflective experiences
+
+o   Quote 1: "Lame sheep aren't always that easy to spot in a field" (Participant 22)
+
+o   Quote 2: "in a flock i would walk around them and the sheep would move" (Participant 27)
+
+o   Quote 3: "it allowed me to get a better sense of my knowledge and skills" (Participant 44)
+
+o   Quote 4: "In real life I would walk around the flock and observe they way the moved" (Participant 70)
+
+5\.       Participants' suggestions for improvements
+
+·       Sub-theme 1: Making sheep move e.g., using additional mechanisms and characters
+
+o   Quote 1: "If there was a way to make each sheep move, that would really help to keep engagement" (Participant 8)
+
+o   Quote 2: "If you wanted to complete the game in a shorter time, you would want the sheep to move around more... Needs a dog to run round them!" (Participant 18)
+
+o   Quote 3: "Would be good to get sheep to move, maybe by walking a person around so they walk away from you..." (Participant 24)
+
+o   Quote 4: "would be nice to have a method of encouraging sheep to move..." (Participant 70)
+
+·       Sub-theme 2: Providing additional visual/sound feedback
+
+o   Quote 1: "i felt there could be improvements made as you chose the right animals maybe a sound so you know your going the right way or a counter in the corner..." (Participant 43)
+
+o   Quote 2: "Could be enhanced by slightly more realistic depiction of sheep movement for non-lame sheep" (Participant 67[JM1] )
+
+\newpage
+
+```{r echo=FALSE, fig.width=6, fig.id="budget"}
+
+#from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
+block_caption("Project Budget Breakdown",
+              style = "Figure",
+              autonum = run_autonum(seq_id = 'suppmat', 
+                                    bkm = 'budget',
+                                    pre_label = "Supplementary Materials ",
+                                    start_at=NULL))
+
+#https://stackoverflow.com/questions/70989930/how-to-include-symbols-in-flextable
+
+w=6
+budgettable %>% 
+      flextable %>%
+      width(., width = (w/(ncol(budgettable)))) %>% 
+      theme_box()
+```
+
+\newpage
+
+## Supplementary Figures
+
+\newpage
+
+```{r echo=FALSE, fig.asp=1, fig.width=7, fig.id="designprocessfig"}
+
+#from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
+block_caption("Description of the human-centered design process",
+              style = "Figure",
+              autonum = run_autonum(seq_id = 'suppfig', 
+                                    bkm = 'designprocessfig',
+                                    pre_label = "Supplementary Figure ",
+                                    start_at=1))
+
+grid::grid.raster(png::readPNG('outputs/figures/game-evolution_v2.png'))
+
+```
+
+\newpage
+
+```{r echo=FALSE, fig.asp=1, fig.width=7, fig.id="accuracyvsRecall"}
+
+block_caption("Comparison of distributions of participants' (n=63) Accuracy i.e. number of sheep they marked as lame that were actually lame) and Recall (i.e. number of the total lame sheep in the flock that they marked) scores",
+              style = "Figure",
+              autonum = run_autonum(seq_id = 'suppfig', 
+                                    bkm = 'accuracyvsRecall',
+                                    pre_label = "Supplementary Figure ",
+                                    start_at=NULL))
+
+grid::grid.raster(tiff::readTIFF('outputs/figures/accuracyvsRecall.tiff'))
+
+```
+
+\newpage
+
+```{r echo=FALSE, fig.height=6, fig.width=6, fig.id="fitfarmingexperience"}
+
+#from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
+block_caption("Model fit plots for the Farming Experience model",
+              style = "Figure",
+              autonum = run_autonum(seq_id = 'suppfig', 
+                                    bkm = 'fitfarmingexperience',
+                                    pre_label = "Supplementary Figure ",
+                                    start_at=NULL))
+par(mfrow=c(2,2))
+plot(farmingexperience_model)
+
+```
+
+\newpage
+
+```{r echo=FALSE, fig.height=6, fig.width=6, fig.id="fitlimp"}
+
+#from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
+block_caption("Model fit plots for the signs (Limp) model",
+              style = "Figure",
+              autonum = run_autonum(seq_id = 'suppfig', 
+                                    bkm = 'fitlimp',
+                                    pre_label = "Supplementary Figure ",
+                                    start_at=NULL))
+
+par(mfrow=c(2,2))
+plot(sign_limp_model)
+
+```
+
+\newpage
+
+```{r echo=FALSE, fig.height=6, fig.width=6, fig.id="fitraisedleg"}
+
+#from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
+block_caption("Model fit plots for the signs (Raised Leg) model",
+              style = "Figure",
+              autonum = run_autonum(seq_id = 'suppfig', 
+                                    bkm = 'fitraisedleg',
+                                    pre_label = "Supplementary Figure ",
+                                    start_at=NULL))
+
+par(mfrow=c(2,2))
+plot(sign_raisedleg_model)
+
+```
+
+\newpage
+
+```{r echo=FALSE, fig.height=6, fig.width=6, fig.id="fitUE"}
+
+#from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
+block_caption("Model fit plots for the User Engagement model",
+              style = "Figure",
+              autonum = run_autonum(seq_id = 'suppfig', 
+                                    bkm = 'fitUE',
+                                    pre_label = "Supplementary Figure ",
+                                    start_at=NULL))
+
+par(mfrow=c(2,2))
+plot(userengagement_model)
+
+
+```
+
+\newpage
+
+# References
