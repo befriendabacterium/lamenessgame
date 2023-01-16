@@ -64,7 +64,7 @@ options(digits=2)
 options(scipen=1000)
 #data
 studydata_formatted<-read.csv('outputs/processed_data/studydata_formatted.csv')
-studydata_formatted_sheepexp<-read.csv('outputs/processed_data/studydata_formatted_sheepexp.csv')
+
 #power analysis
 power_analysis<-readRDS('outputs/models/power_analysis.RDS')
 #models
