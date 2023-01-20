@@ -165,7 +165,10 @@ rownames_keep<-rownames(symptomslookedfor_byfarmingexp_sum)
 symptomslookedfor_byfarmingexp_sum<-apply(symptomslookedfor_byfarmingexp_sum,2,as.numeric)
 rownames(symptomslookedfor_byfarmingexp_sum)<-rownames_keep
 symptomslookedfor_byfarmingexp_sum<-as.table(as.matrix(symptomslookedfor_byfarmingexp_sum))
+#check it
+symptomslookedfor_byfarmingexp_sum
 #save processed data
+write.csv(symptomslookedfor_byfarmingexp_sum,'outputs/processed_data/symptomslookedfor_byfarmingexp_sum.csv')
 saveRDS(symptomslookedfor_byfarmingexp_sum,'outputs/processed_data/symptomslookedfor_byfarmingexp_sum.RDS')
 
 # FORMATTING: LIKERT DATA --------------------------------------------------------------
