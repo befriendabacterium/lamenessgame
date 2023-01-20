@@ -156,14 +156,20 @@ studydata_formatted$moving_type<-factor(studydata_formatted$moving_type, levels=
 
 # MAKE CONTINGENCY TABLE OF LAMENESS SIGNS LOOKED FOR BY FARMING EXPERIENCE -----------------------------------------------------------------------
 
-symptomslookedfor_byfarmingexp_sum<-t(aggregate(symptomslookedfor_df, list(studydata_formatted$sheeplamenessexp_prev), function(x){sum(x)}))
+symptomslookedfor_byfarmingexp_sum<-t(aggregate(symptomslookedfor_df, list(studydata_formatted$farmingexp_YN), function(x){sum(x)}))
 #put yes first for plotting purposes
 symptomslookedfor_byfarmingexp_sum<-symptomslookedfor_byfarmingexp_sum[,c(2,1)]
+#rename columns more clearly
 colnames(symptomslookedfor_byfarmingexp_sum)<-c('Farming experience','No farming experience')
+#remove first row with column names (redundant)
 symptomslookedfor_byfarmingexp_sum<-symptomslookedfor_byfarmingexp_sum[-1,]
+#make a vector of row names
 rownames_keep<-rownames(symptomslookedfor_byfarmingexp_sum)
+#coerce columns to numeric
 symptomslookedfor_byfarmingexp_sum<-apply(symptomslookedfor_byfarmingexp_sum,2,as.numeric)
+#put row names back (they're lost in coercion)
 rownames(symptomslookedfor_byfarmingexp_sum)<-rownames_keep
+#coerce the dataframe to table (needed for baloon plot)
 symptomslookedfor_byfarmingexp_sum<-as.table(as.matrix(symptomslookedfor_byfarmingexp_sum))
 #check it
 symptomslookedfor_byfarmingexp_sum

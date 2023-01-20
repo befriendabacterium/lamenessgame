@@ -727,7 +727,7 @@ dev.off()
 
 #check number of symptoms ticked per participant
 colSums(symptomslookedfor_byfarmingexp_sum)
-x<-colSums(symptomslookedfor_byfarmingexp_sum)
+#chi squared test on contingency table
 symptomsVSfarmingexp_chisq<-chisq.test(symptomslookedfor_byfarmingexp_sum)
 saveRDS(symptomsVSfarmingexp_chisq,'outputs/models/symptomsVSfarmingexp_chisq.RDS')
 
