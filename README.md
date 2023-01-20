@@ -1,7 +1,11 @@
 README
 =======
 
-Code for manuscript 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition'. The data are stored at https://osf.io/a6qu4/ and can be downloaded either manually (if you just want to look at the models/plots) or by running this pipeline (step 1 downloads the data from OSF).
+<p align="center">
+<img src="https://github.com/befriendabacterium/lamenessgame/blob/main/outputs/figures/game_screenshots.png" width="80%" height="80%">
+</p>
+
+Code for manuscript 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition'. The data are stored at https://osf.io/a6qu4/ and can be downloaded either manually (if you just want to look at the models/plots) or by running this pipeline (step 1 downloads the data from OSF). You can play the game here https://wheres-woolly.itch.io/lameness-game.
 
 ## Description
 
