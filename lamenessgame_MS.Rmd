@@ -163,21 +163,19 @@ grid::grid.raster(tiff::readTIFF('outputs/figures/accuracyvsrecall.tiff'))
 
 ## Study participants
 
-A total of `r nrow(studydata_formatted)` people participated in the study; `r sum(studydata_formatted$farmingexp_YN=='No')` had not worked in farming or a related field, and `r sum(studydata_formatted$farmingexp_YN=='Yes')` had worked in farming or a related field. Of those with farming experience, the majority (`r length(grep('Farmer|Stockman/woman/person|Veterinarian|Other',studydata_formatted$sheeproles_type))`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`) had worked with sheep either as farmers (`r length(grep('Farmer',studydata_formatted$sheeproles_type))`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`), stockpeople (`r length(grep('Stockman/woman/person',studydata_formatted$sheeproles_type))`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`), veterinarians (`r length(grep('Veterinarian',studydata_formatted$sheeproles_type))`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`), or in other roles (`r length(grep('Other',studydata_formatted$sheeproles_type))`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`) such as livestock technicians or in agricultural research or policy (N.B. individual participants often had experience in multiple fields, hence numbers do not total `r sum(studydata_formatted$farmingexp_YN=='Yes')`). Most of those who shared information about the levels of lameness they had experienced in the flocks with which they had worked said that they had experienced annual lameness levels of between 5 and 10% (`r sum(studydata_formatted$sheeplamenessexp_prev%in%c('Between 5 and 10%'))`/`r sum(!is.na(studydata_formatted$sheeplamenessexp_prev))`).
+A total of `r nrow(studydata_formatted)` people participated in the study, after the removal of one participant who said that the game did not work properly for them. `r sum(studydata_formatted$farmingexp_YN=='No')` participants had not worked in farming or a related field, and `r sum(studydata_formatted$farmingexp_YN=='Yes')` had worked in farming or a related field. Of those with farming experience, the majority (`r sum(studydata_formatted$sheeproles_any)`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`) had worked with sheep either as farmers (`r sum(studydata_formatted$sheeproles_farmer)`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`), stockpeople (`r sum(studydata_formatted$sheeproles_stockperson)`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`), veterinarians (`r sum(studydata_formatted$sheeproles_vet)`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`), or in other roles (`r sum(studydata_formatted$sheeproles_other)`/`r sum(studydata_formatted$farmingexp_YN=='Yes')`) such as livestock technicians or in agricultural research or policy (N.B. individual participants sometimes had experience in multiple fields, hence numbers do not total `r sum(studydata_formatted$farmingexp_YN=='Yes')`). Most of those who shared information about the levels of lameness they had experienced in the flocks with which they had worked said that they had experienced annual lameness levels of between 5 and 10% (`r sum(studydata_formatted$sheeplamenessexp_prev%in%c('Between 5 and 10%'))`/`r sum(!is.na(studydata_formatted$sheeplamenessexp_prev))`).
 
 ## Participant recall scores in the game
 
-Participants' accuracy and recall scores were distributed as expected, permitting deeper analysis of participants' recall scores (Figure \@ref(fig:accuracyvsrecall)). The majority of participants (%) had accuracy scores above 50% (D'Agostino's test; skew=`r moments::agostino.test(studydata_formatted$accuracy)$statistic[1]`, kurtosis = `r moments::agostino.test(studydata_formatted$accuracy)$statistic[2]`, p-value = `r format.pval(moments::agostino.test(studydata_formatted$accuracy)$p.value,eps=0.01)`), indicating that they were not simply 'cheating' the game by taking a 'shotgun' strategy of marking all or most of the sheep as lame in order to maximise their recall scores. High overall accuracy scores also indicated that our animations of lameness were at least realistic enough for participants to recognise them as lameness, further indicating that variation in recall scores was likely to reflect some level of skill in spotting lameness. Recall scores themselves were normally distributed across the entire percentage range (Figure \@ref(fig:accuracyvsrecall); D'Agostino's test; skew=`r moments::agostino.test(studydata_formatted$recall)$statistic[1]`, kurtosis = `r moments::agostino.test(studydata_formatted$recall)$statistic[2]`, p-value = `r format.pval(moments::agostino.test(studydata_formatted$recall)$p.value,eps=0.01)`), justifying a parametric analysis of the factors influencing participants' these scores.
+Participants' accuracy and recall scores were distributed as expected, permitting deeper analysis of participants' recall scores (Figure \@ref(fig:accuracyvsrecall)). The majority of participants (`r round(sum(studydata_formatted$accuracy>50)/length(studydata_formatted$accuracy)*100,0)`%) had accuracy scores above 50% (D'Agostino's test; skew=`r moments::agostino.test(studydata_formatted$accuracy)$statistic[1]`, kurtosis = `r moments::agostino.test(studydata_formatted$accuracy)$statistic[2]`, p-value = `r format.pval(moments::agostino.test(studydata_formatted$accuracy)$p.value,eps=0.01)`), indicating that they were not simply 'cheating' the game by taking a 'shotgun' strategy of marking all or most of the sheep as lame in order to maximise their recall scores. High overall accuracy scores also indicated that our animations of lameness were at least realistic enough for participants to recognise them as lameness, further indicating that variation in recall scores was likely to reflect some level of skill in spotting lameness. Recall scores themselves were normally distributed across the entire percentage range (Figure \@ref(fig:accuracyvsrecall); D'Agostino's test; skew=`r moments::agostino.test(studydata_formatted$recall)$statistic[1]`, kurtosis = `r moments::agostino.test(studydata_formatted$recall)$statistic[2]`, p-value = `r format.pval(moments::agostino.test(studydata_formatted$recall)$p.value,eps=0.01)`), justifying a parametric analysis of the factors influencing participants' these scores.
 
 ### Farming experience
 
-There was no evidence that real-life farming experience was driving the variation in participants' recall scores (Figure \@ref(fig:farmingexperience)). Initial visual examination of exploratory plots of the data identified no difference in recall scores according to whether participants had ever worked in farming or a related field (Figure \@ref(fig:farmingexperience)A). There were also not visually observable relationships between recall and the number of years the participants had spent working with sheep (Figure \@ref(fig:farmingexperience)B), or the level of lameness those who had worked with sheep had experienced in the sheep flocks with which they had worked (Figure \@ref(fig:farmingexperience)C) - suggesting no higher-level relationships among those with farming experience. Formal statistical testing of the relationship between recall and whether or not the participant had worked in farming or a related field (which encompassed the entire dataset) revealed no significant difference. Those who had not worked in farming or a related field (n = `r sum(studydata_formatted$farmingexp_YN=='No')`) identified a similar percentage of the lame sheep in the game as those who had worked in such fields (n = `r sum(studydata_formatted$farmingexp_YN=='Yes')` ('Farming Experience' model; R^2^~adj~=`r summary(farmingexperience_model)$r.squared`, p-value = `r format.pval(summary(farmingexperience_model)$coefficients[2,4],eps=0.01)`, F =`r summary(farmingexperience_model)$fstatistic[1]`, `r summary(farmingexperience_model)$fstatistic[2]` on `r summary(farmingexperience_model)$fstatistic[3]` DF; Supplementary Figure \@ref(fig:fitfarmingexperience)).
+There was no evidence that real-life farming experience was driving the variation in participants' recall scores (Figure \@ref(fig:farmingexperience)). Initial visual examination of exploratory plots of the data identified no difference in recall scores according to whether participants had ever worked in farming or a related field (Figure \@ref(fig:farmingexperience)A). We validated that this was not just because strong effects of sheep-specific farming experience were being obscured by noise from other types of farming experience; those who had worked with sheep as farmers, stockpeople, veterinarians, or in other roles had visually similar recall scores to those who had not (Supplementary Figure \@ref(fig:specificfarmingexperience)). Similarly, there were also no visually observable relationships between recall and the number of years the participants had spent working with sheep (Figure \@ref(fig:farmingexperience)B), or the level of lameness those who had worked with sheep had experienced in the sheep flocks with which they had worked (Figure \@ref(fig:farmingexperience)C) - again suggesting no higher-level relationships among those with farming experience. Formal statistical testing of the relationship between recall and whether or not the participant had worked in farming or a related field (which encompassed the entire dataset) revealed no significant difference. Those who had not worked in farming or a related field (n = `r sum(studydata_formatted$farmingexp_YN=='No')`) identified a similar percentage of the lame sheep in the game as those who had worked in such fields (n = `r sum(studydata_formatted$farmingexp_YN=='Yes')` ('Farming Experience' model; R^2^~adj~=`r summary(farmingexperience_model)$r.squared`, p-value = `r format.pval(summary(farmingexperience_model)$coefficients[2,4],eps=0.01)`, F =`r summary(farmingexperience_model)$fstatistic[1]`, `r summary(farmingexperience_model)$fstatistic[2]` on `r summary(farmingexperience_model)$fstatistic[3]` DF; Supplementary Figure \@ref(fig:fitfarmingexperience)).
 
 ### Lameness signs looked for
 
-The lameness signs that participants looked for when playing the game were not differentiated by whether they had real-life farming experience (Supplementary Figure \@ref(fig:balloonplot)). Those with farming experience tended to more often look for lameness signs, but there was no statistical difference in the distribution of the signs they looked for compared to those without farming experience (X\^2 = `r symptomsVSfarmingexp_chisq$statistic` df = `r symptomsVSfarmingexp_chisq$parameter`, p = `r format.pval(symptomsVSfarmingexp_chisq$p.value, eps=0.01)`). This suggested that there was potential for an effect of lameness signs looked for that was not already captured in the 'Farming Experience' model.
-
-\newpage
+The lameness signs that participants looked for when playing the game were not differentiated by whether they had real-life farming experience (Supplementary Figure \@ref(fig:balloonplot)). Those with farming experience tended to more often look for lameness signs, but there was no statistical difference in the distribution of the signs they looked for compared to those without farming experience (X^2^ = `r symptomsVSfarmingexp_chisq$statistic` df = `r symptomsVSfarmingexp_chisq$parameter`, p = `r format.pval(symptomsVSfarmingexp_chisq$p.value, eps=0.01)`). This suggested that there was potential for an effect of lameness signs looked for that was not already captured in the 'Farming Experience' model.
 
 ```{r farmingexperience, echo=FALSE, fig.height=4, fig.width=5.25, fig.cap="Relationships between participants’ recall scores and their real-life farming experience. A) Recall scores of those without and with farming experience; B) Recall scores and years of farming experience spent working with sheep (for participants with farming experience).  C) Recall scores according to the perceived levels of lameness experienced in real-life flocks (for participants with farming experience who answered this question). For categorical variables, individual participant data points are jittered using the beeswarm algorithm (R Package 'beeswarm') and mean recall scores are plotted as bold horizontal lines underneath the data points. Mean recall scores coloured red are those likely to be poor estimates due to small sample sizes i.e. the lower or upper quartile exceeds the 95% confidence limits of the mean. The plot is framed in a bold outline if that relationship was formally tested statistically."}
 
@@ -195,15 +193,21 @@ grid::grid.raster(tiff::readTIFF('outputs/figures/symptoms.tiff'))
 
 \newpage
 
-```{r userengagement, echo=FALSE, fig.height=3.25, fig.width=6.5, fig.cap="Recall scores of participants according to B) How many times participant played the game before submitting scores; B) Whether participant had problems using the game controls; C) Whether participant observed the sheep up-close, from afar and then zooming in, or using another strategy (e.g. combination of the two); D) How the participant navigated the virtual field to identify sheep; E) Whether the participant completed the pre-game tutorial; F) The participant's computer set-up/pointing device; G) The time the participant spent playing the game. For categorical variables, individual participant data points are jittered using the beeswarm algorithm (R Package 'beeswarm') and mean recall scores are plotted as bold horizontal lines underneath the data points. Mean recall scores coloured red are those likely to be poor estimates due to small sample sizes i.e. the lower or upper quartile exceeds the 95% confidence limits of the mean. The plot is framed in a bold outline if that relationship was formally tested statistically. For a more detailed explanation of what the categories mean (particular for 'Observing type' and 'Moving type') please refer to Supplementary Material 2"}
+```{r UEnulleffects, echo=FALSE, fig.width=6.75, fig.height=4.95, fig.cap="Recall scores of participants according to B) How many times participant played the game before submitting scores; B) Whether participant had problems using the game controls; C) Whether participant observed the sheep up-close, from afar and then zooming in, or using another strategy (e.g. combination of the two); D) How the participant navigated the virtual field to identify sheep; E) Whether the participant completed the pre-game tutorial; F) The participant's computer set-up/pointing device. Individual participant data points are jittered using the beeswarm algorithm (R Package 'beeswarm') and mean recall scores are plotted as bold horizontal lines underneath the data points. Mean recall scores coloured red are those likely to be poor estimates due to small sample sizes i.e. the lower or upper quartile exceeds the 95% confidence limits of the mean. The plot is framed in a bold outline if that relationship was formally tested statistically. For a more detailed explanation of what the categories mean (particular for 'Observing type' and 'Moving type') please refer to Supplementary Material 2"}
 
-grid::grid.raster(tiff::readTIFF('outputs/figures/UE.tiff'))
+grid::grid.raster(tiff::readTIFF('outputs/figures/UE_nulleffects.tiff'))
 
 ```
 
 ### User engagement
 
-Similarly to the 'Farming experience' and Lameness signs looked for' variables considered, most aspects of participants' user engagement did not have a strong effect on recall scores, with recall scores either widely distributed within, or thinly spread across, the explanatory categories considered (Figure \@ref(fig:userengagement)A-F). The exception to this was that the time spent playing was positively and linearly related to in-game recall (Figure \@ref(fig:userengagement)G), which formal statistical testing confirmed ('User Engagement' model; R^2^~adj~=`r summary(userengagement_model)$r.squared`, p-value = `r format.pval(userengagement_adjp,eps=0.01)`, F =`r summary(userengagement_model)$fstatistic[1]`, `r summary(userengagement_model)$fstatistic[2]` on `r summary(userengagement_model)$fstatistic[3]` DF; Supplementary Figure \@ref(fig:fitUE)). Specifically, within the range playing lengths observed (1.45-10 minutes), participants identified an average of 2 additional sheep for every additional minute played.
+Similarly to the 'Farming experience' and Lameness signs looked for' variables considered, most aspects of participants' user engagement did not have a strong effect on recall scores, with recall scores either widely distributed within, or thinly spread across, the explanatory categories considered (Figure \@ref(fig:UEnulleffects)). The exception to this was that the time spent playing was positively and linearly related to in-game recall (Figure \@ref(fig:UEtimespentplaying)), which formal statistical testing confirmed ('User Engagement' model; R^2^~adj~=`r summary(userengagement_model)$r.squared`, p-value = `r format.pval(userengagement_adjp,eps=0.01)`, F =`r summary(userengagement_model)$fstatistic[1]`, `r summary(userengagement_model)$fstatistic[2]` on `r summary(userengagement_model)$fstatistic[3]` DF; Supplementary Figure \@ref(fig:fitUE)). Specifically, within the range playing lengths observed (1.45-10 minutes), participants identified an average of 2 additional sheep for every additional minute played.
+
+```{r UEtimespentplaying, echo=FALSE, fig.height=4, fig.width=4, fig.cap="Relationship between participants' recall scores and the time they spent playing the game. Solid black line and shaded area represent fit and the 95% confidence interval of the linear model, respectively."}
+
+grid::grid.raster(tiff::readTIFF('outputs/figures/UE_timespentplaying.tiff'))
+
+```
 
 ## Feedback on the game from those with real-life farming experience
 
@@ -229,11 +233,11 @@ The last sub-theme concerned usability and animation/simulation issues. A lack o
 
 #### Emotional responses to the game
 
-Participants with real-life farming experience frequently used the open-form feedback request to express how they felt playing the game, with the 5 key sub-themes emerging in thematic analysis: enjoyment, interest, boredom, frustration, and lack of appeal.
+Participants with real-life farming experience frequently used the open-form feedback request to express how they felt playing the game, with the 4 key sub-themes emerging in thematic analysis: enjoyment, interest, boredom, and frustration.
 
 Some participants express positive feelings about the game such as enjoyment (sub-theme 1), saying that they "*enjoyed the game*" and found it "*entertaining*". Others expressed interest in the game (sub-theme 2), with one commenting that it was "*interesting to be looking for signs in virtual sheep*" and another that they "*thought this was brilliant*".
 
-However, some participants also expressed negative feelings toward playing the game. Boredom (sub-theme 3) and frustration (sub-theme 4) were expressed, and appeared to be mostly related to the staticness of the sheep and their inability to affect it (theme 3: sub-theme 1). For example, one participant noted that they became "*bored waiting for the sheep to move*", and similarly others commented that the game was "*frustrating*" or "*very frustrating*" to play (sub-theme 4), with one noting explicitly that the cause of their frustration was "*waiting for the sheep to move*". In addition, one participant expressed a more general lack of appeal (sub-theme 5), such as "*This sort of game doesn't appeal to me I'm afraid. I've always worked in the real world*".
+However, some participants also expressed negative feelings toward playing the game. Boredom (sub-theme 3) and frustration (sub-theme 4) were expressed, and appeared to be mostly related to the staticness of the sheep and their inability to affect it (theme 3: sub-theme 1). For example, one participant noted that they became "*bored waiting for the sheep to move*", and similarly others commented that the game was "*frustrating*" or "*very frustrating*" to play (sub-theme 4), with one noting explicitly that the cause of their frustration was "*waiting for the sheep to move*".
 
 #### Reflective experiences
 
@@ -251,14 +255,14 @@ Secondly, other participants suggested providing additional visual or sound feed
 
 Feedback from a Likert-Scale questionnaire suggested that the `r sum(studydata_formatted$farmingexp_YN=='Yes')` participants with real-life farming experience could see the potential of games like ours as professional training-type tools in agriculture, but were unsure whether our prototype had realised this potential fully (Figure \@ref(fig:likertplot)). The majority of participants agreed with statements related to the purpose ("It is clear to me how the contents of the game are related to my profession"; 87%) and usability ("The game rules are easy to understand"; 87%) of the game. Similarly, statements expressing the educational potential of the game - "Learning to play this game was easy" (77%), "The contents and structure helped me to become confident that I would learn with this game" (71%), and "I would recommend this game as a form of training/educational tool" (65%) - received agreement from the majority of participants. However, there was lower agreement with the statement expressing that this educational potential had been achieved ("I feel satisfied with the things that I learned from the game"; 45%). Regarding statements related to the realism of the game, there moderate agreement (56%) with the statement "I achieved the goals of the game by applying knowledge" and low agreement (38%) with the statement "The game is a realistic representation of recognising sheep lameness in the field". Statements related to the entertainment value of the game received varied responses. Most participants felt the game offered an appropriate level of challenge (68%), and expressed that they had some fun playing (61%). However, many participants appeared to find the game boring by the end of playing; expressing that they felt the game became monotonous as it progressed (55%) and not recommending it as a form of entertainment (48%). The game was not deemed particularly absorbing, as reflected by the fact that most participants did not lose track of time (77%) or forget about their immediate surroundings (58%) while playing the game.
 
-```{r label=likertplot, echo=FALSE, fig.height=3, fig.width=5.25,fig.cap="Quantitative feedback given on the game via a Likert Scale questionnaire. Statement rated are shown on the rows, with the total percentages of participants with farming experience responding negatively, neutrally and positively to the statements overlayed on the stacked bar graph."}
-
-grid::grid.raster(tiff::readTIFF('outputs/figures/likertplot.tiff'))
-```
-
 # Discussion
 
 Our online evaluation study highlighted the challenges and opportunities of using simulation games for the purposes of supporting real-life livestock husbandry practices. Whilst positive feedback from participants indicated signs of potential for using simulation video games in this context, barriers to this audiences' user engagement with computer games like ours hindered this potential from manifesting more widely. Particular barriers included participants' apparent desire for high levels of realism and engagingness in the game - expectations which we struggled to meet and therefore limited the game's ability to function as a tool for quantitatively assessing, train and understand farmers' ability to recognise the earliest, subtlest signs of lameness. Nonetheless, the results of the study provide valuable insights for the design and use of future similar games and studies in livestock husbandry.
+
+```{r label=likertplot, echo=FALSE, fig.width=6, fig.height=3.4, fig.cap="Quantitative feedback given on the game via a Likert Scale questionnaire. Statement rated are shown on the rows, with the total percentages of participants with farming experience responding negatively, neutrally and positively to the statements overlayed on the stacked bar graph."}
+
+grid::grid.raster(tiff::readTIFF('outputs/figures/likertplot.tiff'))
+```
 
 ## User engagement shapes in-game performance where participants struggle to relate to the simulated environment
 
@@ -276,7 +280,7 @@ Regarding realism, although participants' explicit statements about the game's r
 ```
 <!-- To be sure, we do not think at all that the pursuit of realism was the wrong choice, or that our failure to reach the necessary level of realism was due to lack of skill in our team - realism is clearly important to this audience (as the questionnaire responses reaffirm), and our team had expertise in game programming, scientific animation and sheep gait analysis. However, we do think that we significantly underestimated the complexity of accurately animating something like a sheep gait and the huge amount of body language that farmers are processing when they observe a sheep gait. An animation that was 'realistic enough' for the main members of our team who lacked real-life agricultural experience was likely very unrealistic to the eyes of someone who has spent years observing sheep. A larger budget and associated with this, more time spent refining animations and their in-game performance in consultation with farmers, might have resolved some of the major stumbling blocks around realism to produce more insightful results. -->
 
-Another possible reason recall scores in the game failed to reflect real-life experience and skills is that the game was not sufficiently engaging for participants to play. Some participants expressed boredom or frustration in the after-game feedback, which is probably the reason many quit the game early (reflected by the wide range of times spent playing in Figure \@ref(fig:userengagement)). Again, this was partly related to realism; in the pursuit of realism, we probably made the game overly long and sacrificed entertainment value. For example, the decision to program the sheep to only walk intermittently to better reflect real life behaviour led us to develop a game that was 10 minutes long to ensure participants had a sufficient opportunity to observe each of the 25 sheep in the virtual flock walking at least once. Especially considering that the game consisted of repeating one task, this may have caused many participants to quit the game early, impacting their recall scores. Although an overemphasis on the "fun factor" can be detrimental to the use of games in non-gaming contexts like agriculture [@monk2002], game-based approaches must still achieve a user experience that is to some extent playful and engaging [@treiblmaier2018], especially as many people hold preconceived notions that video games are always designed for the purpose of entertainment. More technical problems such as in-game 'bugs' and problems participants had engaging with the virtual flock may have further limited the game's engagingness. Again reflecting of the minutiae of signals that farmers process when trying to recognise lameness, in-game malfunctions such as the foot-sliding 'bug' - which we considered relatively inconsequential and not a priority (in terms of what was feasible given the predetermined project budget and time frame) to fix before the study roll-out - turned out to be quite distracting for some participants. More generally, the inability to move the virtual sheep and 'work the flock' was frustrating for some participants, who expressed that passive observation was not an efficient way to identify lameness.
+Another possible reason recall scores in the game failed to reflect real-life experience and skills is that the game was not sufficiently engaging for participants to play. Some participants expressed boredom or frustration in the after-game feedback, which is probably the reason many quit the game early (reflected by the wide range of times spent playing in Figure \@ref(fig:UEtimespentplaying)). Again, this was partly related to realism; in the pursuit of realism, we probably made the game overly long and sacrificed entertainment value. For example, the decision to program the sheep to only walk intermittently to better reflect real life behaviour led us to develop a game that was 10 minutes long to ensure participants had a sufficient opportunity to observe each of the 25 sheep in the virtual flock walking at least once. Especially considering that the game consisted of repeating one task, this may have caused many participants to quit the game early, impacting their recall scores. Although an overemphasis on the "fun factor" can be detrimental to the use of games in non-gaming contexts like agriculture [@monk2002], game-based approaches must still achieve a user experience that is to some extent playful and engaging [@treiblmaier2018], especially as many people hold preconceived notions that video games are always designed for the purpose of entertainment. More technical problems such as in-game 'bugs' and problems participants had engaging with the virtual flock may have further limited the game's engagingness. Again reflecting of the minutiae of signals that farmers process when trying to recognise lameness, in-game malfunctions such as the foot-sliding 'bug' - which we considered relatively inconsequential and not a priority (in terms of what was feasible given the predetermined project budget and time frame) to fix before the study roll-out - turned out to be quite distracting for some participants. More generally, the inability to move the virtual sheep and 'work the flock' was frustrating for some participants, who expressed that passive observation was not an efficient way to identify lameness.
 
 Finally, we would like to highlight the importance of budgetary limitations in limiting our ability to achieve the levels of realism and engagingness that participants expected. Although we worked with a skilled game programmer and animator experienced in scientific animation, we were not always able to make the most of their skills due to the constraints of our £5000 budget (Supplementary Material \@ref(fig:budget)). This limited the time the game programmer and animator had available to work on the project, and they were thus not always able to make use of the feedback and support that was available from the review and testing stages (e.g. addressing boredom issues or the 'foot slide' bug). Furthermore, funding was not sufficient to enable us to hire someone with subject-specific expertise (e.g. a sheep farmer) to directly work with the game developer and animator on a day-to-day basis (which they expressed would have helped). We therefore strongly recommend that future grant applications for serious game projects seek sufficient funding to cover more of the primary game developers' time and also facilitate much closer, more direct collaboration between the game developers and the game's intended audience. This would enable design choices to be driven by the intended audience's involvement and not by what is feasible due to budget limitations, increasing game acceptance and the potential benefits of this medium.
 
@@ -434,41 +438,41 @@ REMINDER - GAME RECOMMENDATIONS:
 
 10. What was your strategy for observing the sheep (tick all that apply)?
 
-    [Data plotted in Figure \@ref(fig:userengagement)C]
+    [Data plotted in Figure \@ref(fig:UEnulleffects)C]
 
 -   Observed the whole flock and then zoomed in when I saw one that looked lame
 
-    [Denoted as 'Zoomer' in Figure \@ref(fig:userengagement)C]
+    [Denoted as 'Zoomer' in Figure \@ref(fig:UEnulleffects)C]
 
 -   Observed each sheep up-close until I could see whether or not it had a sign, then moved onto the next sheep
 
-    [Denoted as 'Up-close' in Figure \@ref(fig:userengagement)C]
+    [Denoted as 'Up-close' in Figure \@ref(fig:UEnulleffects)C]
 
 -   Other (please provide details below)
 
-    [Denoted as 'Other' in Figure \@ref(fig:userengagement)C]
+    [Denoted as 'Other' in Figure \@ref(fig:UEnulleffects)C]
 
 10. Please provide brief details about your strategy for observing the sheep?
 
 11. How did you move from sheep to sheep (tick one)?
 
-    [Data plotted in Figure \@ref(fig:userengagement)D]
+    [Data plotted in Figure \@ref(fig:UEnulleffects)D]
 
 -   Randomly
 
-    [Denoted as 'Randomly' in Figure \@ref(fig:userengagement)D]
+    [Denoted as 'Randomly' in Figure \@ref(fig:UEnulleffects)D]
 
 -   Semi-randomly
 
-    [Denoted as 'Semi-randomly' in Figure \@ref(fig:userengagement)D]
+    [Denoted as 'Semi-randomly' in Figure \@ref(fig:UEnulleffects)D]
 
 -   Started at one end of the flock and worked my way to the other
 
-    [Denoted as 'Linear' in Figure \@ref(fig:userengagement)D]
+    [Denoted as 'Linear' in Figure \@ref(fig:UEnulleffects)D]
 
 -   Other (please provide details below)
 
-    [Denoted as 'Other' in Figure \@ref(fig:userengagement)D]
+    [Denoted as 'Other' in Figure \@ref(fig:UEnulleffects)D]
 
 12. Please provide brief details about how you moved from sheep to sheep
 
@@ -587,6 +591,8 @@ block_caption("Thematic analysis results",
 
 **List of comments for qualitative analysis (note the typing errors from the original, should mark as [cic] if quoting in text)**
 
+*N.B. Participant numbers do not go from 1 to 63 because there were a few rounds of testing the questionnaire before study roll-out, which affected the participant counter. The participant counter for the actual study therefore starts at 8 and ends at 71 (64 participants; note the participant 36 was removed from the study because their comments indicated the game did not work properly for them, hence the final sample size was 63). Only participants with real-life farming experience were invited to provide feedback on the game and even then this was optional, hence not all participants 8-71 are featured in the below quotes.*
+
 Participant 8: If there was a way to make each sheep move, that would really help to keep engagement, I got bored waiting for the sheep to move unfortunately.
 
 Participant 15: :) [Happy face]
@@ -606,8 +612,6 @@ Participant 27: i got annoyed waiting for the sheep to move. in a flock i would 
 Participant 34: The graphics werent very clear - it was hard to see if they were holding a leg slightly up. In reality you would move the sheep to look for lameness
 
 Participant 35: I would have enjoyed this game better if the controls worked better . the sheep animations are good, but to a trained eye i found them confusing , eg none of them stood grazing in a normal posture because they were all jiggling their legs all the time
-
-Participant 36: This sort of game doesn't appeal to me I'm afraid. I've always worked in the real world.
 
 Participant 38: none [Cannot include in the analysis]
 
@@ -749,10 +753,6 @@ o   Quote 2: "Found it very frustrating." (Participant 51)
 
 o   Quote 3: "But I got frustrated." (Participant 68)
 
-·       Sub-theme 5: Lack of appeal
-
-o   Quote 1: "This sort of game doesn't appeal to me I'm afraid. I've always worked in the real world." (Participant 36)
-
 4\.       Reflective experiences
 
 o   Quote 1: "Lame sheep aren't always that easy to spot in a field" (Participant 22)
@@ -807,7 +807,7 @@ budgettable %>%
 ```{r echo=FALSE, fig.height=3, fig.width=6.25, fig.id="designprocessfig"}
 
 #from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
-block_caption("Description of the human-centered design process. A) NScreenshots of the initial wireframes/prototypes 1a and 1b developed around the concept of antibiotic use in livestock farming; B) Screenshot of prototype 2, 'Where's Woolly' in which players are challenged to identify simple signs of illness in sheep; C) Screenshot of the animations and final game in which they were used, which is the game evaluated in this study.
+block_caption("Description of the human-centered design process. A) Screenshots of the initial wireframes/prototypes 1a and 1b developed around the concept of antibiotic use in livestock farming; B) Screenshot of prototype 2, 'Where's Woolly' in which players are challenged to identify simple signs of illness in sheep; C) Screenshot of the animations and final game in which they were used, which is the game evaluated in this study.
 ",
               style = "Figure",
               autonum = run_autonum(seq_id = 'suppfig', 
@@ -816,6 +816,21 @@ block_caption("Description of the human-centered design process. A) NScreenshots
                                     start_at=1))
 
 grid::grid.raster(png::readPNG('outputs/figures/game-evolution_v3.png'))
+
+```
+
+\newpage
+
+```{r echo=FALSE, fig.asp=1, fig.height=6, fig.id="specificfarmingexperience"}
+
+block_caption("Relationships between participants' recall scores and real-life experience working with sheep as a A) Farmer; B) Stockman/woman/person C) Veterinarian D) Other e.g. academic, policy. Individual participant data points are jittered using the beeswarm algorithm (R Package 'beeswarm') and mean recall scores are plotted as bold horizontal lines underneath the data points. Mean recall scores coloured red are those likely to be poor estimates due to small sample sizes i.e. the lower or upper quartile exceeds the 95% confidence limits of the mean. The plot is framed in a bold outline if that relationship was formally tested statistically.",
+              style = "Figure",
+              autonum = run_autonum(seq_id = 'suppfig', 
+                                    bkm = 'specificfarmingexperience',
+                                    pre_label = "Supplementary Figure ",
+                                    start_at=NULL))
+
+grid::grid.raster(tiff::readTIFF('outputs/figures/specificfarmingexperience.tiff'))
 
 ```
 

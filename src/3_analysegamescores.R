@@ -12,6 +12,7 @@ library(grDevices)
 studydata_formatted<-readRDS('outputs/processed_data/studydata_formatted.RDS')
 likertdata_formatted<-readRDS('outputs/processed_data/likertdata_formatted.RDS')
 symptomslookedfor_byfarmingexp_sum<-readRDS('outputs/processed_data/symptomslookedfor_byfarmingexp_sum.RDS')
+roles_df<-readRDS('outputs/processed_data/roles_df.RDS')
 
 #read in symptoms looked for df (for plotting)
 symptomslookedfor_df<-read.csv('outputs/processed_data/symptomslookedfor_df.csv')
@@ -381,9 +382,9 @@ layout.matrix<-matrix(1:4,nrow=2,ncol=2)
 layout(layout.matrix)
 #plot(symptom_model.2)
 
-# FIGURE: USER ENGAGEMENT ---------------------------------------------------
+# FIGURE: USER ENGAGEMENT (except time spent playing) ---------------------------------------------------
 
-grDevices::tiff(paste('outputs/figures/UE.tiff', sep=''), res=300, units='in', width=11.5, height=5)
+grDevices::tiff(paste('outputs/figures/UE_nulleffects.tiff', sep=''), res=300, units='in', width=9, height=6.6)
 
 axis.indices<-1
 plot.indices<-2:7
@@ -401,8 +402,6 @@ layout.matrix<-layout.matrix[, rep(1:ncol(layout.matrix), each=6)]
 # layout.matrix<-cbind(matrix(1,nrow=4,ncol=4),layout.matrix)
 #add axis column
 layout.matrix<-cbind(rep(axis.indices,nrow(layout.matrix)),layout.matrix)
-#add big panel for final plot
-layout.matrix<-cbind(layout.matrix,matrix(8,nrow=2,ncol=13))
 
 #check
 layout.matrix
@@ -429,6 +428,7 @@ swarm_locs<-c(0.25,0.75,1.25,1.75,2.25)
 #ADD MEAN LINES
 #calculate means per group
 means<-tapply(studydata_formatted$recall,as.factor(studydata_formatted$timesplayed), mean)
+
 #calculate means per group
 cis<-tapply(studydata_formatted$recall,as.factor(studydata_formatted$timesplayed), Rmisc::CI)
 #calculate lower and upper hinges using custom functions
@@ -452,8 +452,8 @@ beeswarm::beeswarm(studydata_formatted$recall~studydata_formatted$timesplayed,
                    xlab = '', ylab='',
                    notch=F, add=T)
 
-axis(1, swarm_locs, c(1,2,3,4,5)) #n.b. +1 to labels to make more intuitive
-mtext("Times played before submitting score", side=1, cex=0.7, line=2.5)
+axis(1, swarm_locs, c(1,2,3,4,5), cex.axis=1.25) #n.b. +1 to labels to make more intuitive
+mtext("Times played before submitting score", side=1, cex=0.9, line=2.75)
 
 par(mar=c(4.5,1,0.5,1))
 
@@ -490,8 +490,8 @@ beeswarm::beeswarm(studydata_formatted$recall~studydata_formatted$controlsprobs_
                    xlab = '', ylab='',
                    notch=F, add=T)
 
-axis(1, swarm_locs, c("No", "Yes"))
-mtext("Problems with controls?", side=1, cex=0.7, line=2.5)
+axis(1, swarm_locs, c("No", "Yes"), cex.axis=1.25)
+mtext("Problems with controls?", side=1, cex=0.9, line=2.75)
 
 par(mar=c(4.5,1,0.5,1))
 
@@ -527,10 +527,10 @@ beeswarm::beeswarm(studydata_formatted$recall~studydata_formatted$strategy_type,
                    pch = 19, cex=1,
                    xlab = '', ylab='',
                    notch=F, add=T)
-axis(1, swarm_locs, levels(studydata_formatted$strategy_type), cex.axis=1, padj=0)
+axis(1, swarm_locs, levels(studydata_formatted$strategy_type), cex.axis=1.25, padj=0)
 axis(2,seq(0,100,20),NA,tick = T)
 
-mtext("Observing type", side=1, cex=0.7, line=2.5)
+mtext("Observing type", side=1, cex=0.9, line=2.75)
 
 par(mar=c(4.5,2,0.5,0))
 
@@ -566,9 +566,11 @@ beeswarm::beeswarm(studydata_formatted$recall~studydata_formatted$moving_type,
                    at=swarm_locs, pwcol=rep('darkgrey',length(studydata_formatted$moving_type)),
                    pch = 19, cex=1,
                    notch=F, add=T)
-axis(1, swarm_locs, levels(studydata_formatted$moving_type), cex.axis=0.65, padj=0.2)
+labs<-levels(studydata_formatted$moving_type)
+labs[2:3]<-c('Semi-\nrandom','Random')
+axis(1, swarm_locs, labs, cex.axis=1, padj=0.4)
 axis(2,seq(0,100,20),NA,tick = T)
-mtext("Moving type", side=1, cex=0.7, line=2.5)
+mtext("Moving type", side=1, cex=0.9, line=3.25)
 
 par(mar=c(4.5,1,0.5,1))
 
@@ -604,8 +606,8 @@ beeswarm::beeswarm(studydata_formatted$recall~studydata_formatted$tutorial,
                    pch = 19, cex=1,
                    xlab = '', ylab='',
                    notch=F, add=T)
-axis(1, swarm_locs, c('No', 'Yes \n(observed walking)','Yes \n(did not observe)'), cex.axis=0.6, padj=0.2)
-mtext("Completed pre-game tutorial?", side=1, cex=0.7, line=2.5)
+axis(1, swarm_locs, c('No', 'Yes \n(walk seen)','Yes \n(walk not seen)'), cex.axis=1, padj=0.4)
+mtext("Completed pre-game tutorial?", side=1, cex=0.9, line=3.25)
 
 par(mar=c(4.5,1,0.5,1))
 
@@ -641,9 +643,17 @@ beeswarm::beeswarm(studydata_formatted$recall~studydata_formatted$cpu_setup,
                    pch = 19, cex=1,
                    xlab = '', ylab='',
                    notch=F, add=T)
-axis(1, swarm_locs, levels(studydata_formatted$cpu_setup), cex.axis=1, padj=0)
+axis(1, swarm_locs, levels(studydata_formatted$cpu_setup), cex.axis=1.25, padj=0)
 axis(2,seq(0,100,20),NA,tick = T)
-mtext("Computer set-up", side=1, cex=0.7, line=2.5)
+mtext("Computer set-up", side=1, cex=0.9, line=3.25)
+
+dev.off()
+
+# FIGURE: USER ENGAGEMENT (time spent playing) ----------------------------
+
+grDevices::tiff(paste('outputs/figures/UE_timespentplaying.tiff', sep=''), res=300, units='in', width=6, height=6)
+
+par(mar=c(5,5,1,1))
 
 #FIGURE G: INITIATE PLOT
 
@@ -653,7 +663,7 @@ plot(studydata_formatted$recall~studydata_formatted$timespent,
      yaxt='n', ylab='',
      ylim=c(0,100),las=2,
      cex.lab=1.25)
-text(1.25,95,'G', cex=5)
+#text(1.25,95,'G', cex=5)
 #frame plot as is a tested relationship
 box(lwd=3)
 
@@ -670,20 +680,24 @@ polygon(c(rev(newx), newx), c(rev(preds[ ,3]), preds[ ,2]), col = alpha('grey',0
 #add fitted regression line
 lines(preds[,1]~newx, lwd=3)
 
-#ADD BEESWARM POINTS
+#ADD POINTS
 points(studydata_formatted$recall~studydata_formatted$timespent,
-     col='darkgrey', pch=19, xlim=c(1,10), las=2,
-     xaxt='n',xlab='',
-     ylim=c(0,100), ylab='',las=2,
-     cex.lab=1.25)
+       col='darkgrey', pch=19, xlim=c(1,10), las=2,
+       xaxt='n',xlab='',
+       ylim=c(0,100), ylab='',las=2,
+       cex.lab=1.25)
 
 axis(1, seq(0,10,1),seq(0,10,1), cex.axis=1.25)
-axis(2,seq(0,100,20),NA,tick = T)
-mtext('Time spent playing (minutes)', side=1, cex=1, line=2.5)
+axis(2,seq(0,100,20),seq(0,100,20),tick = T, las=2)
+mtext('Time spent playing (minutes)', side=1, cex=1.25, line=2.5)
+mtext('Recall/percentage of lame sheep identified', side=2, cex=1.25, line=2.5)
 
 dev.off()
 
+
 # MODEL(S): USER ENGAGEMENT --------------------------------------------
+
+
 
 #make model
 userengagement_model<-lm(studydata_formatted$recall_asin~studydata_formatted$timespent)
@@ -722,6 +736,87 @@ plot(likert_plot,
      plot.percents=T, plot.percent.low=F,plot.percent.neutral=F, plot.percent.high=F)
 
 dev.off()
+
+
+# SUPPLEMENTARY FIGURE: SPECIFIC FARMING EXPERIENCE ---------------------------------------------------
+
+sheeproles<-c('Sheep farmer', 'Sheep stockperson', 'Sheep veterinarian', 'Other work with sheep')
+
+grDevices::tiff(paste('outputs/figures/specificfarmingexperience.tiff', sep=''), res=300, units='in', width=7, height=9)
+
+axis.indices<-1
+plot.indices<-2:5
+panel.rows<-2
+panel.cols<-2
+
+layout.matrix<-matrix(plot.indices,
+                      nrow=2,
+                      ncol=2, byrow=T)
+#rep rows
+layout.matrix<-layout.matrix[, rep(1:ncol(layout.matrix), each=3)]
+#rep cols
+layout.matrix<-layout.matrix[rep(1:nrow(layout.matrix), each=3),]
+#add axis column
+layout.matrix<-cbind(rep(axis.indices,nrow(layout.matrix)),layout.matrix)
+#check
+layout.matrix
+layout(layout.matrix)
+
+par(mar=c(7,10,2,0.5))
+par(mar=c(5,0.5,0.5,1))
+
+plot.new()
+text(0.5,0.5,'Recall/percentage of lame sheep identified', cex=2.5, srt=90)
+
+#recall by sheep farming exp (ignore Any experience)
+for (r in 1:(ncol(roles_df)-1)){
+  
+  #initiate plot
+  plot(1~1,
+       xlim=c(0,1),ylim=c(0,100),
+       xlab='', ylab='',
+       xaxt='n',yaxt='n',
+       type='n')
+  #swarm locations
+  swarm_locs<-c(0.25,0.75)
+  
+  #ADD MEAN LINES
+  #calculate means per group
+  means<-tapply(studydata_formatted$recall,as.factor(roles_df[,r]), mean)
+  #calculate means per group
+  cis<-tapply(studydata_formatted$recall,as.factor(roles_df[,r]), Rmisc::CI)
+  #calculate lower and upper hinges using custom functions
+  lowerhinges<-tapply(studydata_formatted$recall,as.factor(roles_df[,r]), lower_hinge)
+  upperhinges<-tapply(studydata_formatted$recall,as.factor(roles_df[,r]), upper_hinge)
+  notches_matrix<-cbind(unlist(lapply(cis,min))<lowerhinges,unlist(lapply(cis,max))<lowerhinges)
+  #would it have notches in a box plot? i.e. is confidence interval (range) is more than the inter-quartile range
+  notches<-rowSums(notches_matrix)
+  #initiate mean colour column by adding 1 to true/false notches (so false is lty=1)
+  mean_cols<-notches+1
+  #add means with appropriate colour to plot
+  segments(swarm_locs-0.125,means,swarm_locs+0.125,means, lwd=3, col=mean_cols)
+  
+  #ADD BEESWARM POINTS
+  beeswarm::beeswarm(studydata_formatted$recall~roles_df[,r],
+                     at=swarm_locs, pwcol=rep('darkgrey',length(studydata_formatted$recall)),
+                     pch = 19, cex=2,
+                     xaxt='n',
+                     xlab = '', ylab='',
+                     notch=F, add=T)
+  
+  axis(1, swarm_locs, c("No", "Yes"), cex.axis=1.25)
+  #if start of a row, label the y axis
+  if(r%in%c(1,3)){
+    axis(2,seq(0,100,20),seq(0,100,20),tick = T, las=2)
+  }
+  axis(2,seq(0,100,20),NA,tick = T, las=2, cex=1.25)
+  
+  mtext(sheeproles[r], side=1, cex=1, line=3)
+  
+}
+
+dev.off()
+
 
 # TESTING FOR DIFFERENCES IN SYMPTOMS LOOKED FOR BY FARMING EXPERIENCE --------
 
