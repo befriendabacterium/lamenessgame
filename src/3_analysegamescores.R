@@ -16,14 +16,14 @@ roles_df<-readRDS('outputs/processed_data/roles_df.RDS')
 
 #read in symptoms looked for df (for plotting)
 symptomslookedfor_df<-read.csv('outputs/processed_data/symptomslookedfor_df.csv')
-#vector of symptoms
+#vector of symptoms (relabelled to facilitate fitting on plot)
 symptoms<-c(
   'Uneven posture',
   'Shortened stride on one leg when walking',
-  'Pair of legs which were moving at different speeds',
+  'Pair of legs moving at different speeds',
   'Nodding of head',
-  'Not weight bearing on affected leg when standing',
-  'Not weight bearing on affected leg when walking',
+  'Not weight bearing on leg (standing)',
+  'Not weight bearing on leg (walking)',
   'Reluctance to move',
   'Slower walking pace',
   'Other')
@@ -287,7 +287,7 @@ plot.new()
 text(0.5,0.5,'Recall/percentage of lame sheep identified', cex=2.5, srt=90)
 
 #recall by symptoms
-for (s in 1:length(symptoms)){
+for (s in 1:ncol(symptomslookedfor_df)){
   
   #initiate plot
   plot(1~1,
