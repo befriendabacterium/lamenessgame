@@ -15,7 +15,7 @@ symptomslookedfor_byfarmingexp_sum<-readRDS('outputs/processed_data/symptomslook
 roles_df<-readRDS('outputs/processed_data/roles_df.RDS')
 
 #read in symptoms looked for df (for plotting)
-symptomslookedfor_df<-read.csv('outputs/processed_data/symptomslookedfor_df.csv')
+symptomslookedfor_df<-readRDS('outputs/processed_data/symptomslookedfor_df.RDS')
 #vector of symptoms (relabelled to facilitate fitting on plot)
 symptoms<-c(
   'Uneven posture',
@@ -320,7 +320,7 @@ for (s in 1:ncol(symptomslookedfor_df)){
   
   #ADD BEESWARM POINTS
   beeswarm::beeswarm(studydata_formatted$recall~symptomslookedfor_df[,s],
-                     at=swarm_locs, pwcol=rep('darkgrey',length(studydata_formatted$farmingexp_YN)),
+                     at=swarm_locs, pwcol=rep('darkgrey',length(studydata_formatted$recall)),
                      pch = 19, cex=2,
                      xaxt='n',
                      xlab = '', ylab='',
