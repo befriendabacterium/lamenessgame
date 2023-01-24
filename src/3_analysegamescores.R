@@ -22,8 +22,8 @@ symptoms<-c(
   'Shortened stride on one leg when walking',
   'Pair of legs moving at different speeds',
   'Nodding of head',
-  'Not weight bearing on leg (standing)',
-  'Not weight bearing on leg (walking)',
+  'Not weight bearing on one leg (standing)',
+  'Not weight bearing on one leg (walking)',
   'Reluctance to move',
   'Slower walking pace',
   'Other')
