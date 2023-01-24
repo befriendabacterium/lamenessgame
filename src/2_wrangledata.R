@@ -141,7 +141,7 @@ rownames(symptomslookedfor_df)<-studydata_formatted$ID
 
 #write symptoms looked for df (easier to use for plotting)
 saveRDS(symptomslookedfor_df,'outputs/processed_data/symptomslookedfor_df.RDS')
-write.csv(symptomslookedfor_df,'outputs/processed_data/symptomslookedfor_df.csv', row.names = F)
+write.csv(symptomslookedfor_df,'outputs/processed_data/symptomslookedfor_df.csv', row.names = T)
 
 #change colnames to shorthand
 colnames(symptomslookedfor_df)<-c('UP','SS','LS','NH','WBS','WBW','RM','SW','O')
