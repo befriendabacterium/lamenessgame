@@ -732,8 +732,9 @@ likert_plot<-likert::likert(likertdata_formatted)
 grDevices::tiff(paste('outputs/figures/likertplot.tiff', sep=''), res=300, units='in', width=14, height=8)
 
 plot(likert_plot,
-     text.size=2.5,
-     plot.percents=T, plot.percent.low=F,plot.percent.neutral=F, plot.percent.high=F)
+     text.size=2.5, wrap=100, tick=T,
+     plot.percents=T, plot.percent.low=F,plot.percent.neutral=F, plot.percent.high=F)+
+theme(axis.text.y = element_text(size = 10))
 
 dev.off()
 
