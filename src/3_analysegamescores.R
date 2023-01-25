@@ -729,7 +729,7 @@ for(i in 1:ncol(likertdata_formatted)) {
 
 likert_plot<-likert::likert(likertdata_formatted)
 
-grDevices::tiff(paste('outputs/figures/likertplot.tiff', sep=''), res=300, units='in', width=14, height=8)
+grDevices::tiff(paste('outputs/figures/likertplot.tiff', sep=''), res=300, units='in', width=16, height=7)
 
 plot(likert_plot,
      text.size=2.5, wrap=100, tick=T,
