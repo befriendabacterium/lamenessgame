@@ -18,10 +18,14 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
 
 ### 1. Download data from OSF
 
-  * **script**: `1_downloaddata`: Run this script to download the data from OSF.
+  * **script**: `1_downloaddata.R`: Run this script to download the data from OSF (https://osf.io/a6qu4/).
 
-  * **inputs**: 
-    * Study data archived online at https://osf.io/a6qu4/
+  * **inputs**: There are three options for downloading the 'inputs' and 'outputs' data, related to where in the pipeline you want to start running the code.
+    * `1_start`: These inputs and outputs folders contain only the 'rawest' data i.e. the data needed to run the analysis from the start to the end. 
+    * `2_preanalysis`: These inputs and outputs folders contain the data after pipeline step 2 ('2_wrangledata.csv') has been done i.e. data has been wrangled and is ready for analysis. This allows you to run from the point of analysis (i.e. step 3/'3_analysedata.R').
+    * `3_end`: These inputs and outputs folders contain the end result of running all of the steps/scripts in the pipeline.
+    
+    You can choose which option you want by changing the 'whichpoint' variable to the relevant string (i.e. 1_start, 2_preanalysis, 3_end)
 
   * **outputs**:
 
@@ -30,7 +34,7 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
     
 ### 2. Process raw data
 
-  * **script**: `2_wrangledata`: Run this script to wrangle the data into a format more suited to analysis and plotting. 
+  * **script**: `2_wrangledata.R`: Run this script to wrangle the data into a format more suited to analysis and plotting. 
   
    * **inputs**: 
       * `inputs/lamenessstudydata_010721.xlsx`: Raw file of participant data outputted from MS forms.
@@ -44,7 +48,7 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
       
 ### 3. Analyse and plot data
 
-  * **script**: `3_analysedata`: Run this script to download the data from OSF.
+  * **script**: `3_analysedata.R`: Run this script to download the data from OSF.
 
   * **inputs**:
     *  `processed_data/studydata_formatted.csv/RDS`: All participant performance data (i.e. participant feedback data form Likert questionnaire and open-form feedback has been removed) after wrangling and formatting via the pipeline. The .csv format is more human-readable, whilst the .RDS file is more computer-readable and the input used in the pipeline, because it preserves all changes made in R needed to reproduce the outputs exactly (e.g. ordering of factor levels in plots)
