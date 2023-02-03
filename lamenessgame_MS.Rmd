@@ -1,6 +1,6 @@
 ---
 title: Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition
-author: Matt L. Jones$^1$, Maxwell S. Barnish$^2$, Robert R. Hughes$^3$, Aimee Murray$^1$, Omid Mansour$^4$, Tiziana Loni, Holly Vickery$^5$, Myfanwy Lloyd Evans$^6$, Laura Green$^7$, Nervo Verdezoto$^4$
+author: Matt L. Jones$^1$, Maxwell S. Barnish$^2$, Robert R. Hughes$^3$, Aimee K. Murray$^1$, Omid Mansour$^4$, Tiziana Loni, Holly M. Vickery$^5$, Myfanwy L. Evans$^6$, Laura Green$^7$, Nervo Verdezoto$^4$
 output:
   officedown::rdocx_document:
     plots:
