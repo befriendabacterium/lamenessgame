@@ -1,22 +1,17 @@
-# LOAD NECESSARY PACKAGES -------------------------------------------------
-
-library(scales)
-library(plyr)
-library(dplyr)
-library(ggplot2)
-library(likert)
-library(grDevices)
-
 # READ IN DATA ------------------------------------------------------------
 
+#read in main formatted study data dataframe (all but likert data)
 studydata_formatted<-readRDS('outputs/processed_data/studydata_formatted.RDS')
+#read in likert questionnaire data dataframe
 likertdata_formatted<-readRDS('outputs/processed_data/likertdata_formatted.RDS')
+#read in contigency table of symptoms looked for by farming experience
 symptomslookedfor_byfarmingexp_sum<-readRDS('outputs/processed_data/symptomslookedfor_byfarmingexp_sum.RDS')
-roles_df<-readRDS('outputs/processed_data/roles_df.RDS')
 
-#read in symptoms looked for df (for plotting)
+#read in a dataframe of roles in which participants worked with sheep (easier for plotting)
+roles_df<-readRDS('outputs/processed_data/roles_df.RDS')
+#read in symptoms looked for df (easier for plotting)
 symptomslookedfor_df<-readRDS('outputs/processed_data/symptomslookedfor_df.RDS')
-#vector of symptoms (relabelled to facilitate fitting on plot)
+#vector of symptoms (for plot labels)
 symptoms<-c(
   'Uneven posture',
   'Shortened stride on one leg when walking',
@@ -33,10 +28,11 @@ likert_categories_ordered<-c("Strongly disagree", "Disagree", "Neutral", "Agree"
 
 # LOAD CUSTOM FUNCTIONS ----------------------------------------------------------
 
+#function to calculate range (one number not two)
 actualrange<-function(x){range(x)[2]-range(x)[1]}
-#calculate lower hinge (smallest data value that is larger than the first quartile: https://webhelp.esri.com/arcgisdesktop/9.3/body.cfm?tocVisable=1&ID=478&TopicName=Box%20plot%20graphs)
+#sensu boxplot(), calculate lower hinge (smallest data value that is larger than the first quartile: https://webhelp.esri.com/arcgisdesktop/9.3/body.cfm?tocVisable=1&ID=478&TopicName=Box%20plot%20graphs)
 lower_hinge<-function(x){min(x[x>quantile(x)[2]])}
-#calculate lower hinge (largest data value that is smaller than the first quartile: https://webhelp.esri.com/arcgisdesktop/9.3/body.cfm?tocVisable=1&ID=478&TopicName=Box%20plot%20graphs)
+#sensu boxplot(),calculate lower hinge (largest data value that is smaller than the first quartile: https://webhelp.esri.com/arcgisdesktop/9.3/body.cfm?tocVisable=1&ID=478&TopicName=Box%20plot%20graphs)
 upper_hinge<-function(x){min(x[x<quantile(x)[4]])}
 
 # POWER ANALYSIS ----------------------------------------------------------
@@ -46,7 +42,6 @@ upper_hinge<-function(x){min(x[x<quantile(x)[4]])}
 pwr_a1<-pwr::pwr.f2.test(u=1, v=61, sig.level = 0.05, power=0.95) 
 pwr_a1
 saveRDS(pwr_a1, 'outputs/models/power_analysis.RDS')
-effectsize::f2_to_eta2(pwr_a1$f2)
 
 # SKEWNESS TEST: ACCURACY VS RECALL ---------------------------------------
 
@@ -56,14 +51,21 @@ moments::agostino.test(studydata_formatted$recall)
 
 # FIGURE: ACCURACY VS RECALL ----------------------------------------------
 
+#create a temporary vector of both accuracy and recall
 accuracyvsrecall<-c(studydata_formatted$accuracy,studydata_formatted$recall)
+#add it to a temporary dataframe with a column to say whether score is accuracy or recall
 accuracyvsrecall<-cbind(c(rep('accuracy',length(accuracyvsrecall)/2), rep('recall',length(accuracyvsrecall)/2)),
                         accuracyvsrecall)
+#coerce to dataframe
 accuracyvsrecall<-as.data.frame(accuracyvsrecall)
+#rename columns
 colnames(accuracyvsrecall)<-c('score_type','score')
+#coerce score column to numeric
 accuracyvsrecall$score<-as.numeric(accuracyvsrecall$score)
 
+#initiate plotting device/output file
 grDevices::tiff(paste('outputs/figures/accuracyvsrecall.tiff', sep=''), res=300, units='in', width=8, height=8)
+#set margins
 par(mar=c(4,6,4,4))
 
 #INITIATE PLOT
@@ -99,22 +101,28 @@ beeswarm::beeswarm(accuracyvsrecall$score~accuracyvsrecall$score_type,
                    xlim=swarm_locs, add=T,
                    las=2, xaxt='n',yaxt='n',
                    method='compactswarm')
-
+#add x axis
 axis(1, swarm_locs, c('Accuracy', 'Recall'), line=0, tick=T, cex.axis=1.5)
+#add y axis
 axis(2, seq(0,100,10), seq(0,100,10), las=2, cex.axis=1.5)
+#add ylab
 title(ylab='Score (%)', cex.lab=1.5, line=4)
 
 dev.off()
 
 # FIGURE: FARMING EXPERIENCE ----------------------------------------------
 
+#initiate plotting device/output file
 grDevices::tiff(paste('outputs/figures/farmingexperience.tiff', sep=''), res=300, units='in', width=9, height=6)
 
+#set the index for the multi-plot axis label
 axis.indices<-1
+#set the indices of the plots
 plot.indices<-2:3
 panel.rows<-2
 panel.cols<-2
 
+#make a matrix for the plot layout
 layout.matrix<-matrix(plot.indices,
                       nrow=2,
                       ncol=1, byrow=F)
@@ -145,7 +153,6 @@ plot(1~1,
 text(0.05,97.5,'A', cex=5)
 #swarm locations
 swarm_locs<-c(0.25,0.75)
-
 
 #ADD MEAN LINES
 #calculate means per group
@@ -262,6 +269,7 @@ p.adjust(summary(farmingexperience_model)$coefficients[,"Pr(>|t|)"][2], method =
 
 # FIGURE: SYMPTOMS LOOKED FOR ----------------------------------------------
 
+#initiate plotting device/output file
 grDevices::tiff(paste('outputs/figures/symptoms.tiff', sep=''), res=300, units='in', width=9, height=12)
 
 axis.indices<-1
@@ -384,6 +392,7 @@ layout(layout.matrix)
 
 # FIGURE: USER ENGAGEMENT (except time spent playing) ---------------------------------------------------
 
+#initiate plotting device/output file
 grDevices::tiff(paste('outputs/figures/UE_nulleffects.tiff', sep=''), res=300, units='in', width=9, height=6.6)
 
 axis.indices<-1
@@ -651,6 +660,7 @@ dev.off()
 
 # FIGURE: USER ENGAGEMENT (time spent playing) ----------------------------
 
+#initiate plotting device/output file
 grDevices::tiff(paste('outputs/figures/UE_timespentplaying.tiff', sep=''), res=300, units='in', width=6, height=6)
 
 par(mar=c(5,5,1,1))
@@ -729,6 +739,7 @@ for(i in 1:ncol(likertdata_formatted)) {
 
 likert_plot<-likert::likert(likertdata_formatted)
 
+#initiate plotting device/output file
 grDevices::tiff(paste('outputs/figures/likertplot.tiff', sep=''), res=300, units='in', width=16, height=7)
 
 plot(likert_plot,
@@ -743,6 +754,7 @@ dev.off()
 
 sheeproles<-c('Sheep farmer', 'Sheep stockperson', 'Sheep veterinarian', 'Other work with sheep')
 
+#initiate plotting device/output file
 grDevices::tiff(paste('outputs/figures/specificfarmingexperience.tiff', sep=''), res=300, units='in', width=7, height=9)
 
 axis.indices<-1
@@ -825,8 +837,10 @@ dev.off()
 colSums(symptomslookedfor_byfarmingexp_sum)
 #chi squared test on contingency table
 symptomsVSfarmingexp_chisq<-chisq.test(symptomslookedfor_byfarmingexp_sum)
+#save result as R data file
 saveRDS(symptomsVSfarmingexp_chisq,'outputs/models/symptomsVSfarmingexp_chisq.RDS')
 
+#initiate plotting device/output file
 grDevices::tiff(paste('outputs/figures/balloonplot.tiff', sep=''), res=300, units='in', width=12, height=6)
 gplots::balloonplot(t(symptomslookedfor_byfarmingexp_sum),
             main ="", sorted=T,
