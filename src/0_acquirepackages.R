@@ -10,10 +10,12 @@ if('rstudioapi'%in%rownames(installed.packages())==F){
   install.packages('rstudioapi')
 }
 
+#parse the lines in the scripts to create searchable strings
 file_lines<-unlist(sapply(
   list.files('src/', full.names = T)[-grep('acquirepackages.R',list.files('src/', full.names = T))],
   readLines))
 
+#find packages by looking for ::'s in scripts
 pckgs <- lapply(file_lines, function(l) { 
   if(grepl("::", l)){
     gsub(".*?([[:alnum:]\\.]+)::.*","\\1", l) 
