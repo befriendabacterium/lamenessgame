@@ -313,10 +313,6 @@ These results suggest that more needs to be done to establish whether games can 
 
 We would like to thank to all the farmers, veterinarians, academics and others who participated in the human-centered design, piloting and evaluation process to create these game and execute this study. Thank you to our advisory board who helped shape the game, animations, and study design. Thank you to the Health and Environment Public Engagement Group at University of Exeter's European Centre for Environment and Human Health, who acted as test participants before the formal roll-out of the online study. Thank you to ethics and press office staff at the University of Exeter for enabling the study to meet ethical guidelines and advertising the study in order to recruit participants. Finally, many thanks to the 63 participants who gave their time to take part in the online evaluation study, whose data forms the basis of this paper. The last author would also like to acknowledge the Centre for Artificial Intelligence, Robotics and Human-Machine Systems (IROHMS) operation C82092, part-funded by the European Regional Development Fund (ERDF) through the Welsh Government. This study was funded by the GW4 Crucible Seed Funding Award Cru20_3.
 
-# Data availability statement
-
-The anonymous data collected during the online evaluation study (the results of which are reported in this paper) are freely available in raw (direct output from MS Forms platform) and formatted (tidied using R code) formats at [INSERT OPEN SCIENCE FRAMEWORK LINK UPON ACCEPTANCE OF MS] and the lead author's Github repository (<https://github.com/befriendabacterium/lamenessgame>). R code to reproduce the analysis and figures reported in the manuscript is also deposited here. The Supplementary Materials of the manuscript also contain the thematic analysis of the open-form feedback in a more accessible Word document format. All participants approved the open publication of these anonymous data when signing the consent form to participate in the study.
-
 \newpage
 
 # Supplementary Material
