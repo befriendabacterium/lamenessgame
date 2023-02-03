@@ -16,7 +16,7 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
 
 ## Pipeline
 
-*N.B. Please use R Studio and load the 'lamenessgame_repo.Rproj' R Project file before running the scripts individually, in order. This will get you in the right directory straight away and allow you to dive straight in. You can run it in other ways and without RStudio, but it's easier this way.*
+*N.B. Please use RStudio and load the 'lamenessgame_repo.Rproj' R Project file before running the scripts individually, in order. This will get you in the right directory straight away and allow you to dive straight in. You can run it in other ways and without RStudio, but it's easier this way.*
 
 ### 0. Acquire and load necessary packages
 
