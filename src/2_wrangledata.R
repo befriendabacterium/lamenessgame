@@ -233,31 +233,31 @@ colnames(studydata_formatted)
 
 #move farming experience columns to end
 studydata_formatted<-
-  relocate(studydata_formatted, 
+  dplyr::relocate(studydata_formatted, 
            c('accuracy','accuracy_asin','recall','recall_asin'),
            .after = colnames(studydata_formatted)[ncol(studydata_formatted)])
 
 #move farming experience columns to end
 studydata_formatted<-
-  relocate(studydata_formatted, 
+  dplyr::relocate(studydata_formatted, 
            c('farmingexp_YN', 'sheeproles_farmer','sheeproles_stockperson','sheeproles_vet','sheeproles_other', 'sheeproles_any','sheepexp_years', 'sheeproles_details','sheeplamenessexp_prev'),
            .after = colnames(studydata_formatted)[ncol(studydata_formatted)])
 
 #move signs looked for columns to end
 studydata_formatted<-
-  relocate(studydata_formatted, 
+  dplyr::relocate(studydata_formatted, 
            c('UP','SS','LS','NH','WBS','WBW','RM','SW','O', 'symptoms_otherdetails'),
            .after = colnames(studydata_formatted)[ncol(studydata_formatted)])
 
 #move user engagement columns to end
 studydata_formatted<-
-  relocate(studydata_formatted, 
+  dplyr::relocate(studydata_formatted, 
            c('timesplayed','tutorial','cpu_setup','controlsprobs_YN','controlsprobs_descrip','strategy_type','strategy_otherdetails','moving_type','moving_otherdetails', 'timespent'),
            .after = colnames(studydata_formatted)[ncol(studydata_formatted)])
 
 #move feedback column to end
 studydata_formatted<-
-  relocate(studydata_formatted, 
+  dplyr::relocate(studydata_formatted, 
            c('Please.share.any.general.feedback.main.thoughts.after.playing.the.game.below.'),
            .after = colnames(studydata_formatted)[ncol(studydata_formatted)])
 
