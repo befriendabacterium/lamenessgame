@@ -11,7 +11,7 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
 
 * author = Matt Lloyd Jones
 * web = https://github.com/befriendabacterium/
-* date = January 20th, 2023
+* date = February 3rd, 2023
 * description = This repository contains a pipeline the reproduce the analyses in the preprint 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition' (https://www.biorxiv.org/content/10.1101/2022.10.26.513828v2).
 
 ## Pipeline
