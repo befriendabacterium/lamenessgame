@@ -16,6 +16,8 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
 
 ## Pipeline
 
+*N.B. Please use R Studio and load the 'lamenessgame_repo.Rproj' R Project file before running the scripts individually, in order. This will get you in the right directory straight away and allow you to dive straight in. You can run it in other ways and without RStudio, but it's easier this way.*
+
 ### 0. Acquire and load necessary packages
 
   * **script**: `0_acquirepackages.R` - Run this script to install and load the necessary packages for the pipeline. In brief, it goes through all the source code files, identifies packages called via the :: double colon operator, compares it to what you have installed, and installs and loads them if you don't.
