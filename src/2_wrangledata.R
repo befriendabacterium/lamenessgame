@@ -1,9 +1,3 @@
-# LOAD NECESSARY PACKAGES -------------------------------------------------
-
-library(scales)
-library(dplyr)
-library(ggplot2)
-
 # READ IN RAW DATA FROM MS FORMS --------------------------------------------------------
 
 #read in raw study data
