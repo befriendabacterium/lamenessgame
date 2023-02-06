@@ -20,7 +20,7 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
 
 ### 0. Acquire and load necessary packages
 
-  * **script**: `0_acquirepackages.R` - Run this script to install and load the necessary packages for the pipeline. In brief, it goes through all the source code files, identifies packages called via the :: double colon operator, compares it to what you have installed, and installs and loads them if you don't.
+  * **script**: `src/0_acquirepackages.R` - Run this script to install and load the necessary packages for the pipeline. In brief, it goes through all the source code files, identifies packages called via the :: double colon operator, compares it to what you have installed, and installs and loads them if you don't.
   
   * **inputs**: None. 
   
@@ -29,7 +29,7 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
 
 ### 1. Download data from OSF
 
-  * **script**: `1_downloaddata.R`: Run this script to download the raw input data from OSF (https://osf.io/a6qu4/), plus some outputs that was produced manually (rather than via code).
+  * **script**: `src/1_downloaddata.R`: Run this script to download the raw input data from OSF (https://osf.io/a6qu4/), plus some outputs that was produced manually (rather than via code).
 
   * **inputs**: None. 
 
@@ -40,7 +40,7 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
     
 ### 2. Process raw data
 
-  * **script**: `2_wrangledata.R`: Run this script to wrangle the data into a format more suited to analysis and plotting. 
+  * **script**: `src/2_wrangledata.R`: Run this script to wrangle the data into a format more suited to analysis and plotting. 
   
    * **inputs**: 
       * `inputs/lamenessstudydata_010721.xlsx`: Raw file of participant data outputted from MS forms.
@@ -54,7 +54,7 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
       
 ### 3. Analyse and plot data
 
-  * **script**: `3_analysedata.R`: Run this script to download the data from OSF.
+  * **script**: `src/3_analysedata.R`: Run this script to download the data from OSF.
 
   * **inputs**:
     *  `processed_data/studydata_formatted.csv/RDS`: All participant performance data (i.e. participant feedback data form Likert questionnaire and open-form feedback has been removed) after wrangling and formatting via the pipeline. The .csv format is more human-readable, whilst the .RDS file is more computer-readable and the input used in the pipeline, because it preserves all changes made in R needed to reproduce the outputs exactly (e.g. ordering of factor levels in plots)
@@ -74,7 +74,16 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
      * `figures/likertplot.tiff`: Figure 5 in the manuscript, a Likert plot of the Likert-Scale questionnaire data giving feedback on the game.
   
   
-  
+ ### 4. Write manuscript via R Markdown
+   
+   * **script**: `lamenessgame_MS.Rmd`: Run this R Markdown script to reproduce the submitted manuscript.
+   * **inputs**: 
+      * `outputs`: Contents of the 'outputs' folder and its sub-folders`, which contain all processed data, models and figures used in the paper.
+      * `article_template.docx`: A template Word article which contains the necessary Styles to make the manuscript look how we want.
+      * `lamenessgame_refs.bib`: Bibliography file containing the references used in the manuscript.
+      * `harvard-cite-them-right_12thed_no-et-al.csl` - Citation style file to produce in-text citations and a bibliography in Cite Them Right 12th edition's Harvard style (no 'et al' used in the bibliography). Obtained from Zotero Style repository (https://www.zotero.org/styles?q=id%3Aharvard-cite-them-right-no-et-al) 
+   * **outputs**: 
+      * `lamenessgame_MS.docx` - A Word file of the submitted manuscript.
   
 
       
