@@ -686,7 +686,7 @@ preds <- predict(model, newdata = data.frame(timespent=newx), interval = 'confid
 #back-transform predictions (from arcsine-square root)
 preds<-(sin(preds)^2)*100
 #fill in area between regression line and confidence interval
-polygon(c(rev(newx), newx), c(rev(preds[ ,3]), preds[ ,2]), col = alpha('grey',0.5), border = NA)
+polygon(c(rev(newx), newx), c(rev(preds[ ,3]), preds[ ,2]), col = scales::alpha('grey',0.5), border = NA)
 #add fitted regression line
 lines(preds[,1]~newx, lwd=3)
 
