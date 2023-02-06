@@ -20,12 +20,11 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
 
 ### 0. Acquire and load necessary packages
 
-  * **script**: `src/0_acquirepackages.R` - Run this script to install and load the necessary packages for the pipeline. In brief, it goes through all the source code files, identifies packages called via the :: double colon operator, compares it to what you have installed, and installs and loads them if you don't.
+  * **script**: `src/0_acquirepackages.R` - Run this script to install and load the necessary packages for the pipeline. In brief, it goes through all the source code files, identifies packages called via the :: double colon operator, compares it to what you have installed and installs them if you don't. Finally, it loads all the required packages via library() - **so you need to run this script to make the pipeline work even if you have all the required packages (because they may not be loaded)**
   
   * **inputs**: None. 
   
   * **outputs**: Necessary packages that you didn't have before are downloaded to your R packages library.
-  
 
 ### 1. Download data from OSF
 
