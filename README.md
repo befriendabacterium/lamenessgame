@@ -24,7 +24,7 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
   
   * **inputs**: None. 
   
-    * **outputs**: Necessary packages that you didn't have before are downloaded to your R packages library.
+  * **outputs**: Necessary packages that you didn't have before are downloaded to your R packages library.
   
 
 ### 1. Download data from OSF
