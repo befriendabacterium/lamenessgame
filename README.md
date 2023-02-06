@@ -11,7 +11,7 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
 
 * author = Matt Lloyd Jones
 * web = https://github.com/befriendabacterium/
-* date = February 3rd, 2023
+* date = February 6th, 2023
 * description = This repository contains a pipeline the reproduce the analyses in the preprint 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition' (https://www.biorxiv.org/content/10.1101/2022.10.26.513828v2).
 
 ## Pipeline
@@ -24,19 +24,14 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
 
 ### 1. Download data from OSF
 
-  * **script**: `1_downloaddata.R`: Run this script to download the data from OSF (https://osf.io/a6qu4/).
+  * **script**: `1_downloaddata.R`: Run this script to download the raw input data from OSF (https://osf.io/a6qu4/), plus some outputs that was produced manually (rather than via code).
 
-  * **inputs**: There are three options for downloading the 'inputs' and 'outputs' data, related to where in the pipeline you want to start running the code.
-    * `1_start`: These inputs and outputs folders contain only the 'rawest' data i.e. the data needed to run the analysis from the start to the end. 
-    * `2_preanalysis`: These inputs and outputs folders contain the data after pipeline step 2 ('2_wrangledata.csv') has been done i.e. data has been wrangled and is ready for analysis. This allows you to run from the point of analysis (i.e. step 3/'3_analysedata.R').
-    * `3_end`: These inputs and outputs folders contain the end result of running all of the steps/scripts in the pipeline.
-    
-    You can choose which option you want by changing the 'whichpoint' variable to the relevant string (i.e. 1_start, 2_preanalysis, 3_end)
+  * **inputs**: None. 
 
   * **outputs**:
 
     * `inputs` folder: contains the raw data collected from participants in the study via MS_forms (`inputs/lamenessstudydata_010721.xlsx`), and an .RDS file with the desired order in which to rearrange the columns (`newcolnames.RDS`). 
-    * `outputs` folder: contains the final data produced by the pipeline after processing and analysis of this data. N.B. This contains manually produced outputs from the study - Figure 1/game screenshots (`game_screenshots.csv`), the budget (`budget.csv`), and Supplementary Figure 1 of game screenshots relating to the game development process.
+    * `outputs` folder: folder that will contain the final data produced by the pipeline after processing and analysis of this data. Upon download, it only contains manually produced outputs from the study - Figure 1/game screenshots (`game_screenshots.csv`), the budget (`budget.csv`), and Supplementary Figure 1 of game screenshots relating to the game development process.
     
 ### 2. Process raw data
 
