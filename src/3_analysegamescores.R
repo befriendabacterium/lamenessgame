@@ -742,6 +742,7 @@ likert_plot<-likert::likert(likertdata_formatted)
 #initiate plotting device/output file
 grDevices::tiff(paste('outputs/figures/likertplot.tiff', sep=''), res=300, units='in', width=16, height=7)
 
+library(plyr)
 plot(likert_plot,
      text.size=2.5, wrap=100, tick=T,
      plot.percents=T, plot.percent.low=F,plot.percent.neutral=F, plot.percent.high=F)+
