@@ -5,7 +5,9 @@ README
 <img src="https://github.com/befriendabacterium/lamenessgame/blob/main/game_screenshots.png" width="80%" height="80%">
 </p>
 
-Code for manuscript 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition'. The data are stored at https://osf.io/a6qu4/ and can be downloaded either manually (if you just want to look at the models/plots) or by running this pipeline (step 1 downloads the data from OSF). You can play the game here https://wheres-woolly.itch.io/lameness-game.
+Code for manuscript 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition'. The data are stored at https://osf.io/a6qu4/ and downloaded, processed and analysed in this pipeline. If you want to see the outputs of the code without running it, then just head over to https://doi.org/10.5281/zenodo.7605244, where all code, input and output data are archived. If you're reading this having downloaded this Zenodo repository but want to run the code anyway, then you can skip straight to step 2 ('2. Process raw data') in the pipeline.
+
+If you'd just like to play the game, then head over to https://wheres-woolly.itch.io/lameness-game to play it online, or to https://doi.org/10.5281/zenodo.7612059 to play it offline.
 
 ## Description
 
@@ -36,8 +38,10 @@ Code for manuscript 'Exploring the potential of using simulation games for engag
 
     * `inputs` folder: contains the raw data collected from participants in the study via MS_forms (`inputs/lamenessstudydata_010721.xlsx`), and an .RDS file with the desired order in which to rearrange the columns (`newcolnames.RDS`). 
     * `outputs` folder: folder that will contain the final data produced by the pipeline after processing and analysis of this data. Upon download, it only contains manually produced outputs from the study - Figure 1/game screenshots (`game_screenshots.csv`), the budget (`budget.csv`), and Supplementary Figure 1 of game screenshots relating to the game development process.
-    
+       
 ### 2. Process raw data
+
+ *N.B. If you've downlaoded the Zenodo repository rather than downloaded/cloned the Github repo, you can start from here as you'll already have the input data (and the output data, actually).*
 
   * **script**: `src/2_wrangledata.R`: Run this script to wrangle the data into a format more suited to analysis and plotting. 
   
