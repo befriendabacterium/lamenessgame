@@ -41,7 +41,7 @@ If you'd just like to play the game, then head over to https://wheres-woolly.itc
        
 ### 2. Process raw data
 
- *N.B. If you've downlaoded the Zenodo repository rather than downloaded/cloned the Github repo, you can start from here as you'll already have the input data (and the output data, actually).*
+ *N.B. If you've downloaded the Zenodo repository rather than downloaded/cloned the Github repo, you can start from here as you'll already have the input data (and the output data, actually).*
 
   * **script**: `src/2_wrangledata.R`: Run this script to wrangle the data into a format more suited to analysis and plotting. 
   
