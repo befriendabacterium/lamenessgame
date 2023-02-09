@@ -81,7 +81,7 @@ If you'd just like to play the game, then head over to https://wheres-woolly.itc
    
    * **script**: `lamenessgame_MS.Rmd`: Run this R Markdown script to reproduce the submitted manuscript.
    * **inputs**: 
-      * `outputs`: Contents of the 'outputs' folder and its sub-folders`, which contain all processed data, models and figures used in the paper.
+      * `outputs`: Contents of the 'outputs' folder and its sub-folders, which contain all processed data, models and figures used in the paper.
       * `article_template.docx`: A template Word article which contains the necessary Styles to make the manuscript look how we want.
       * `lamenessgame_refs.bib`: Bibliography file containing the references used in the manuscript.
       * `harvard-cite-them-right_12thed_no-et-al.csl` - Citation style file to produce in-text citations and a bibliography in Cite Them Right 12th edition's Harvard style (no 'et al' used in the bibliography). Obtained from Zotero Style repository (https://www.zotero.org/styles?q=id%3Aharvard-cite-them-right-no-et-al) 
