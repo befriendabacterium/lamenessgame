@@ -40,9 +40,10 @@ text-align: justify}
 library(rmarkdown)
 library(officer)
 library(officedown)
+library(knitr)
 library(flextable)
 library(dplyr)
-library(knitr)
+
 
 #set figure position as centered
 knitr::opts_chunk$set(echo = TRUE, dpi=300, fig.pos = "!h", out.extra = "", ft.keepnext = F)
@@ -234,7 +235,7 @@ The second sub-theme, the 'simple, unnatural, and confusing game simulation', co
 
 The third sub-theme was the inability to mark non-lame sheep. The fact that there was no means to mark non-lame sheep in the game made it more difficult for participants to remember which sheep they had already assessed, though this was also an intentional design choice. We omitted this feature after discussion with our advisory board, because we considered that in real-life situations of assessing lameness, only lame sheep are usually marked. One participant's comment composed this theme, mirroring the difficult compromise between playability and realism that we encountered when designing the game: "*It was a bit frustrating not to be able to mark non-lame sheep when surveying, but that is more realistic and requires strategy*".
 
-The last sub-theme concerned usability and animation/simulation issues. A lack of smoothness in game animations was commented on in particular by one participant who noted that this issue made "*the distinction between a normal walking gait and a limp less easy to discern*". Meanwhile, another participant noted a lack of clarity in the graphics, which meant "*it was hard to see if they were holding a leg slightly up*". Another participant also mentioned the 'foot slide' bug, which was commonly commented on by participants from a range of perspectives, as reflected in the previous sub-themes.
+The last sub-theme concerned usability and animation/simulation issues. A lack of smoothness in game animations was commented on by one participant in particular, who noted that this issue made "*the distinction between a normal walking gait and a limp less easy to discern*". Meanwhile, another participant noted a lack of clarity in the graphics, which meant "*it was hard to see if they were holding a leg slightly up*". Another participant also mentioned the 'foot slide' bug, which was commonly commented on by participants from a range of perspectives, as reflected in the previous sub-themes.
 
 #### Emotional responses to the game
 
