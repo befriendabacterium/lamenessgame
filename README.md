@@ -80,6 +80,8 @@ Before beginning anything, please open the 'lamenessgame_repo.Rproj' R Project f
   
   
  ### 4. Write manuscript via R Markdown
+ 
+ *N.B. Running R Markdown scripts works a little differently to running R scripts - open them in RStudio and then click the 'Knit' button (ball of twine with needle through it) instead of running R code as you usually would. You'll need 'rmarkdown' and a few other packages to get this to work - I've tried to include these in '0_acquirepackages.R' but if RStudio prompts you for more, then just click 'Yes' to install the packages. Another thing to note is that the outputted Word document may prompt you when opened with 'This document contains references to other files. Do you want to update the fields in this document - Yes/No' - just click 'Yes' and the Word doc should open fine.*
    
    * **script**: `lamenessgame_MS.Rmd`: Run this R Markdown script to reproduce the submitted manuscript.
    * **inputs**: 
