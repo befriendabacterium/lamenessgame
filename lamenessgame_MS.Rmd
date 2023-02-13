@@ -1,6 +1,6 @@
 ---
 title: Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition
-author: Matt L. Jones$^1$, Maxwell S. Barnish$^2$, Robert R. Hughes$^3$, Aimee K. Murray$^1$, Omid Mansour$^4$, Tiziana Loni, Holly M. Vickery$^5$, Myfanwy L. Evans$^6$, Laura Green$^7$, Nervo Verdezoto$^4$
+author: Matt L. Jones$^1$, Maxwell S. Barnish$^2$, Robert R. Hughes$^3$, Aimee K. Murray$^1$, Omid Mansour$^4$, Tiziana Loni$^5$, Holly M. Vickery$^6$, Myfanwy L. Evans$^7$, Laura Green$^8$, Nervo Verdezoto$^4$
 output:
   officedown::rdocx_document:
     plots:
@@ -85,9 +85,10 @@ budgettable<-read.csv('outputs/figures/budget.csv', encoding='latin1', check.nam
 2.  University of Exeter Medical School, South Cloisters, University of Exeter, St Luke's Campus, Heavitree Road, Exeter, EX1 2LU, UK
 3.  Faculty of Engineering, University of Bristol, Bristol, BS8 1TR, UK
 4.  School of Computer Science and Informatics, Human-centered Computing Group, Cardiff University
-5.  School of Agriculture, Policy and Development, University of Reading, Reading, RG6 6AR, UK
-6.  Ty Cerrig, Rhydymain, Dolgellau, Gwynedd, LL40 2B, UK
-7.  Life and Environmental Sciences, University of Birmingham, Birmingham, B15 2TT, UK
+5.  Independent Researcher, Dundee, UK
+6.  School of Agriculture, Policy and Development, University of Reading, Reading, RG6 6AR, UK
+7.  Independent Researcher, Dolgellau, UK
+8.  Life and Environmental Sciences, University of Birmingham, Birmingham, B15 2TT, UK
 
 # Abstract
 
