@@ -37,10 +37,12 @@ text-align: justify}
 ```
 ```{r setup, include=FALSE}
 
+library(rmarkdown)
 library(officer)
+library(officedown)
 library(flextable)
 library(dplyr)
-library(captioner)
+library(knitr)
 
 #set figure position as centered
 knitr::opts_chunk$set(echo = TRUE, dpi=300, fig.pos = "!h", out.extra = "", ft.keepnext = F)
