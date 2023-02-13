@@ -5,20 +5,22 @@ README
 <img src="https://github.com/befriendabacterium/lamenessgame/blob/main/game_screenshots.png" width="80%" height="80%">
 </p>
 
-Code for manuscript 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition'. The data are stored at https://osf.io/a6qu4/ and downloaded, processed and analysed in this pipeline. If you want to see the outputs of the code without running it, then just head over to https://doi.org/10.5281/zenodo.7605244, where all code, input and output data are archived. If you're reading this having downloaded this Zenodo repository but want to run the code anyway, then you can skip straight to step 2 ('2. Process raw data') in the pipeline.
+This repository contains the code associated with the manuscript 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition'. The data are stored at https://osf.io/a6qu4/ and downloaded, processed and analysed in this pipeline. To run the pipeline and reproduce the analysis and manuscript itself, please clone (https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) or download (green 'Code' button, top right) this repository  to your local computer, open the R project file ('lamenessgame_repo.Rproj'), and then run each of the R scripts in 'src' in RStudio individually and in order (see 'Pipeline' below). 
+
+If you want to see the outputs of the code without running it, then just head over to https://doi.org/10.5281/zenodo.7605244, where all code, input and output data are archived. If you're reading this having downloaded this Zenodo repository but want to run the code anyway, then you can skip straight to step 2 ('2. Process raw data') in the pipeline.
 
 If you'd just like to play the game, then head over to https://wheres-woolly.itch.io/lameness-game to play it online, or to https://doi.org/10.5281/zenodo.7612059 to play it offline.
 
 ## Description
 
 * author = Matt Lloyd Jones
-* web = https://github.com/befriendabacterium/
+* web = https://github.com/befriendabacterium/lamenessgame
 * date = February 6th, 2023
 * description = This repository contains a pipeline to reproduce the analyses in the preprint 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition' (https://www.biorxiv.org/content/10.1101/2022.10.26.513828v2).
 
 ## Pipeline
 
-*N.B. Please use RStudio and load the 'lamenessgame_repo.Rproj' R Project file before running the scripts individually, in order. This will get you in the right directory straight away and allow you to dive straight in. You can run it in other ways and without RStudio, but it's easier this way.*
+Before beginning anything, please open the 'lamenessgame_repo.Rproj' R Project file in RStudio before running the scripts individually, in the order described in the pipeline. This will get you in the right directory straight away and allow you to dive straight in. You can run it in other ways and without RStudio, but it's easiest this way.
 
 ### 0. Acquire and load necessary packages
 
