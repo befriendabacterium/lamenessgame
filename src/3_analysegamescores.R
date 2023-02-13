@@ -1,3 +1,8 @@
+# SET FIGURE RESOLUTION ---------------------------------------------------
+
+#set this to whatever you want to et the figures outputted in the desired resolution (though obviously the higher you go, the more memory it'll take up)
+figres=900
+
 # READ IN DATA ------------------------------------------------------------
 
 #read in main formatted study data dataframe (all but likert data)
@@ -64,7 +69,7 @@ colnames(accuracyvsrecall)<-c('score_type','score')
 accuracyvsrecall$score<-as.numeric(accuracyvsrecall$score)
 
 #initiate plotting device/output file
-grDevices::tiff(paste('outputs/figures/accuracyvsrecall.tiff', sep=''), res=300, units='in', width=8, height=8)
+grDevices::tiff(paste('outputs/figures/accuracyvsrecall.tiff', sep=''), res=figres, units='in', width=8, height=8)
 #set margins
 par(mar=c(4,6,4,4))
 
@@ -113,7 +118,7 @@ dev.off()
 # FIGURE: FARMING EXPERIENCE ----------------------------------------------
 
 #initiate plotting device/output file
-grDevices::tiff(paste('outputs/figures/farmingexperience.tiff', sep=''), res=300, units='in', width=9, height=6)
+grDevices::tiff(paste('outputs/figures/farmingexperience.tiff', sep=''), res=figres, units='in', width=9, height=6)
 
 #set the index for the multi-plot axis label
 axis.indices<-1
@@ -270,7 +275,7 @@ p.adjust(summary(farmingexperience_model)$coefficients[,"Pr(>|t|)"][2], method =
 # FIGURE: SYMPTOMS LOOKED FOR ----------------------------------------------
 
 #initiate plotting device/output file
-grDevices::tiff(paste('outputs/figures/symptoms.tiff', sep=''), res=300, units='in', width=9, height=12)
+grDevices::tiff(paste('outputs/figures/symptoms.tiff', sep=''), res=figres, units='in', width=9, height=12)
 
 axis.indices<-1
 plot.indices<-2:10
@@ -393,7 +398,7 @@ layout(layout.matrix)
 # FIGURE: USER ENGAGEMENT (except time spent playing) ---------------------------------------------------
 
 #initiate plotting device/output file
-grDevices::tiff(paste('outputs/figures/UE_nulleffects.tiff', sep=''), res=300, units='in', width=9, height=6.6)
+grDevices::tiff(paste('outputs/figures/UE_nulleffects.tiff', sep=''), res=figres, units='in', width=9, height=6.6)
 
 axis.indices<-1
 plot.indices<-2:7
@@ -661,7 +666,7 @@ dev.off()
 # FIGURE: USER ENGAGEMENT (time spent playing) ----------------------------
 
 #initiate plotting device/output file
-grDevices::tiff(paste('outputs/figures/UE_timespentplaying.tiff', sep=''), res=300, units='in', width=6, height=6)
+grDevices::tiff(paste('outputs/figures/UE_timespentplaying.tiff', sep=''), res=figres, units='in', width=6, height=6)
 
 par(mar=c(5,5,1,1))
 
@@ -740,8 +745,8 @@ for(i in 1:ncol(likertdata_formatted)) {
 likert_plot<-likert::likert(likertdata_formatted)
 
 #initiate plotting device/output file
-grDevices::tiff(paste('outputs/figures/likertplot.tiff', sep=''), res=300, units='in', width=16, height=7)
-
+grDevices::tiff(paste('outputs/figures/likertplot.tiff', sep=''), res=figres, units='in', width=16, height=7)
+library(ggplot2)
 library(plyr)
 plot(likert_plot,
      text.size=2.5, wrap=100, tick=T,
@@ -756,7 +761,7 @@ dev.off()
 sheeproles<-c('Sheep farmer', 'Sheep stockperson', 'Sheep veterinarian', 'Other work with sheep')
 
 #initiate plotting device/output file
-grDevices::tiff(paste('outputs/figures/specificfarmingexperience.tiff', sep=''), res=300, units='in', width=7, height=9)
+grDevices::tiff(paste('outputs/figures/specificfarmingexperience.tiff', sep=''), res=figres, units='in', width=7, height=9)
 
 axis.indices<-1
 plot.indices<-2:5
@@ -842,7 +847,7 @@ symptomsVSfarmingexp_chisq<-chisq.test(symptomslookedfor_byfarmingexp_sum)
 saveRDS(symptomsVSfarmingexp_chisq,'outputs/models/symptomsVSfarmingexp_chisq.RDS')
 
 #initiate plotting device/output file
-grDevices::tiff(paste('outputs/figures/balloonplot.tiff', sep=''), res=300, units='in', width=12, height=6)
+grDevices::tiff(paste('outputs/figures/balloonplot.tiff', sep=''), res=figres, units='in', width=12, height=6)
 gplots::balloonplot(t(symptomslookedfor_byfarmingexp_sum),
             main ="", sorted=T,
             xlab ="", ylab="",
