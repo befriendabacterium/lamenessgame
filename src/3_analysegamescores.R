@@ -1,7 +1,7 @@
 # SET FIGURE RESOLUTION ---------------------------------------------------
 
 #set this to whatever you want to et the figures outputted in the desired resolution (though obviously the higher you go, the more memory it'll take up)
-figres=900
+figres=300
 
 # READ IN DATA ------------------------------------------------------------
 
