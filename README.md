@@ -14,7 +14,7 @@ If you'd just like to play the game, then head over to https://wheres-woolly.itc
 * author = Matt Lloyd Jones
 * web = https://github.com/befriendabacterium/
 * date = February 6th, 2023
-* description = This repository contains a pipeline the reproduce the analyses in the preprint 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition' (https://www.biorxiv.org/content/10.1101/2022.10.26.513828v2).
+* description = This repository contains a pipeline to reproduce the analyses in the preprint 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition' (https://www.biorxiv.org/content/10.1101/2022.10.26.513828v2).
 
 ## Pipeline
 
@@ -41,7 +41,7 @@ If you'd just like to play the game, then head over to https://wheres-woolly.itc
        
 ### 2. Process raw data
 
- *N.B. If you've downlaoded the Zenodo repository rather than downloaded/cloned the Github repo, you can start from here as you'll already have the input data (and the output data, actually).*
+ *N.B. If you've downloaded the Zenodo repository rather than downloaded/cloned the Github repo, you can start from here as you'll already have the input data (and the output data, actually).*
 
   * **script**: `src/2_wrangledata.R`: Run this script to wrangle the data into a format more suited to analysis and plotting. 
   
@@ -81,7 +81,7 @@ If you'd just like to play the game, then head over to https://wheres-woolly.itc
    
    * **script**: `lamenessgame_MS.Rmd`: Run this R Markdown script to reproduce the submitted manuscript.
    * **inputs**: 
-      * `outputs`: Contents of the 'outputs' folder and its sub-folders`, which contain all processed data, models and figures used in the paper.
+      * `outputs`: Contents of the 'outputs' folder and its sub-folders, which contain all processed data, models and figures used in the paper.
       * `article_template.docx`: A template Word article which contains the necessary Styles to make the manuscript look how we want.
       * `lamenessgame_refs.bib`: Bibliography file containing the references used in the manuscript.
       * `harvard-cite-them-right_12thed_no-et-al.csl` - Citation style file to produce in-text citations and a bibliography in Cite Them Right 12th edition's Harvard style (no 'et al' used in the bibliography). Obtained from Zotero Style repository (https://www.zotero.org/styles?q=id%3Aharvard-cite-them-right-no-et-al) 
