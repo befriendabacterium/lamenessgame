@@ -5,6 +5,7 @@
 inputs
 outputs
 game
+lamenessgame.zip
 lamenessgame_MS.docx
 osf_test/src/run_wholepipeline.R
 osf_test/src/gamescores_analysis.R
