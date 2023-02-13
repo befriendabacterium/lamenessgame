@@ -1,3 +1,7 @@
+# DESCRIPTION -------------------------------------------------------------
+
+# Run this script to run the quantitative analyses and (re)produce the R-produced figures used in the manuscript.
+
 # SET FIGURE RESOLUTION ---------------------------------------------------
 
 #set this to whatever you want to et the figures outputted in the desired resolution (though obviously the higher you go, the more memory it'll take up)

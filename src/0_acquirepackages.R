@@ -1,3 +1,7 @@
+# DESCRIPTION -------------------------------------------------------------
+
+# Run this script to install and load the necessary packages for the pipeline. In brief, it goes through all the source code files, identifies packages called via the :: double colon operator, compares it to what you have installed and installs them if you don't. Finally, it loads all the required packages via library() - so you need to run this script to make the pipeline work even if you have all the required packages (because they may not be loaded)
+
 # START -------------------------------------------------------------------
 
 #if Rtools package not installed, install. Needed for setting working directory

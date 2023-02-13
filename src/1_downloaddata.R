@@ -1,3 +1,7 @@
+# DESCRIPTION -------------------------------------------------------------
+
+# Run this script to download the raw input data from OSF (https://osf.io/a6qu4/), plus some outputs that was produced manually (rather than via code).
+
 # DOWNLOAD DATA FROM OSF --------------------------------------------------
 
 # FROM OSF-ARCHIEVED DATA (TO DOWNLOAD FROM OSF)

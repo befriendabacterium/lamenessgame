@@ -1,3 +1,7 @@
+# DESCRIPTION -------------------------------------------------------------
+
+# Run this script to wrangle the data into a format more suited to analysis and plotting.
+
 # READ IN RAW DATA FROM MS FORMS --------------------------------------------------------
 
 #read in raw study data
