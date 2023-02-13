@@ -215,7 +215,7 @@ grid::grid.raster(tiff::readTIFF('outputs/figures/UE_timespentplaying.tiff'))
 
 ### Feedback received as open-form responses
 
-`r sum(!is.na(studydata_formatted$Please.share.any.general.feedback.main.thoughts.after.playing.the.game.below.))` out of `r sum(studydata_formatted$farmingexp_YN=='Yes')` participants with real-life farming experience provided additional free-text feedback on the game and their experience playing it. During the qualitative thematic analysis [@braun2006] of these responses, five key themes emerged: the perceived realism of the game, reflective experiences, challenges of playing the simulation game, emotional responses to the game, and participants' suggestions for improvement.
+`r sum(!is.na(studydata_formatted$Please.share.any.general.feedback.main.thoughts.after.playing.the.game.below.))` out of `r sum(studydata_formatted$farmingexp_YN=='Yes')` participants with real-life farming experience provided additional free-text feedback on the game and their experience playing it. During the qualitative thematic analysis [@braun2006] of these responses, five key themes emerged: the perceived realism of the game, reflective experiences, challenges of playing the simulation game, emotional responses to the game, and participants' suggestions for improvement (Supplementary Material \@ref(fig:thematicanalysis)).
 
 #### Perceived realism of the game
 
