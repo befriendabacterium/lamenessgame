@@ -59,7 +59,7 @@ Before beginning anything, please open the 'lamenessgame_repo.Rproj' R Project f
       
 ### 3. Analyse and plot data
 
-  * **script**: `src/3_analysedata.R`: Run this script to download the data from OSF.
+  * **script**: `src/3_analysedata.R`:  Run this script to run the quantitative analyses and (re)produce the R-produced figures used in the manuscript.
 
   * **inputs**:
     *  `processed_data/studydata_formatted.csv/RDS`: All participant performance data (i.e. participant feedback data form Likert questionnaire and open-form feedback has been removed) after wrangling and formatting via the pipeline. The .csv format is more human-readable, whilst the .RDS file is more computer-readable and the input used in the pipeline, because it preserves all changes made in R needed to reproduce the outputs exactly (e.g. ordering of factor levels in plots)
