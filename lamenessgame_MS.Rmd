@@ -40,33 +40,23 @@ text-align: justify}
 library(officer)
 library(flextable)
 library(dplyr)
+library(captioner)
 
+#set figure position as centered
 knitr::opts_chunk$set(echo = TRUE, dpi=300, fig.pos = "!h", out.extra = "", ft.keepnext = F)
 
-## Custom function to restart numbering at the start of each new chapter.
-## You could also just do this manually!
-new_chapter <- function(){
-  if(!exists("chapter_count")) chapter_count <<- 0 
-  chapter_count <<- chapter_count + 1
-  }
-
-
-library(captioner)
-fig_nums <- captioner(prefix = "Figure", suffix = ":", auto_space = TRUE,
-  style = NULL, style_prefix = FALSE, levels = 1, type = NULL,
-  infix = ".", before = TRUE, knitr_op = NULL, css_class = NULL)
-
-suppfig_nums <- captioner(prefix = "Supplementary Figure", suffix = ":", auto_space = TRUE,
-  style = NULL, style_prefix = FALSE, levels = 1, type = NULL,
-  infix = ".", before = TRUE, knitr_op = NULL, css_class = NULL)
-
-
+#set significant digits to 2
 options(digits=2)
+#turn off scientific notation
 options(scipen=1000)
-#data
+
+#READ IN DATA
+#main study data
 studydata_formatted<-read.csv('outputs/processed_data/studydata_formatted.csv')
+#likert questionnaire data
 likertdata_formatted<-read.csv('outputs/processed_data/likertdata_formatted.csv')
 
+#READ IN MODELS
 #power analysis
 power_analysis<-readRDS('outputs/models/power_analysis.RDS')
 #models
@@ -81,8 +71,7 @@ sign_raisedleg_adjp<-readRDS('outputs/models/symptom_raisedleg_adjp.RDS')
 userengagement_model<-readRDS('outputs/models/userengagement_model.RDS')
 userengagement_adjp<-readRDS('outputs/models/userengagement_adjp.RDS')
 
-
-
+#read in budget table
 budgettable<-read.csv('outputs/figures/budget.csv', encoding='latin1', check.names = F)
 
 ```
@@ -119,7 +108,9 @@ Here, we explore the potential of using computer-based gaming as an innovative a
 
 ```{r label=gamescreenshots, echo=FALSE, fig.asp=1, fig.width=5.25, fig.cap="Screenshots of the game summarising its main features. A) In the game, players are presented with a field of virtual sheep and the goal of observing them to identify those with a lame gait. B) Users can zoom in and select sheep, spraying them purple to mark them as lame C) At the end of the game (10 minute timer ends or users click 'Done'), users are presented with scores based on how many of the sheep they marked as lame were actually lame, as well as some related educational information."}
 
-grid::grid.raster(png::readPNG('outputs/figures/game_screenshots.png'))
+grid::grid.raster(
+  png::readPNG('outputs/figures/game_screenshots.png')
+  )
 
 ```
 
@@ -157,7 +148,9 @@ In the Likert scale sub-questionnaire, participants rated the game on such facto
 
 ```{r accuracyvsrecall, echo=FALSE, fig.asp=1, fig.width=3.5, fig.cap="Comparison of distributions of participants' (n=63) accuracy i.e. number of sheep they marked as lame that were actually lame) and recall (i.e. number of the total lame sheep in the flock that they marked) scores. Individual participant data points are jittered using the beeswarm algorithm (R Package 'beeswarm') and mean recall scores are plotted as bold horizontal lines underneath the data points."}
 
-grid::grid.raster(tiff::readTIFF('outputs/figures/accuracyvsrecall.tiff'))
+grid::grid.raster(
+  tiff::readTIFF('outputs/figures/accuracyvsrecall.tiff')
+  )
 
 ```
 
@@ -181,7 +174,9 @@ The lameness signs that participants looked for when playing the game were not d
 
 ```{r farmingexperience, echo=FALSE, fig.height=4, fig.width=5.25, fig.cap="Relationships between participants’ recall scores and their real-life farming experience. A) Recall scores of those without and with farming experience; B) Recall scores and years of farming experience spent working with sheep (for participants with farming experience).  C) Recall scores according to the perceived levels of lameness experienced in real-life flocks (for participants with farming experience who answered this question). For categorical variables, individual participant data points are jittered using the beeswarm algorithm (R Package 'beeswarm') and mean recall scores are plotted as bold horizontal lines underneath the data points. Mean recall scores coloured red are those likely to be poor estimates due to small sample sizes i.e. the lower or upper quartile exceeds the 95% confidence limits of the mean. The plot is framed in a bold outline if that relationship was formally tested statistically."}
 
-grid::grid.raster(tiff::readTIFF('outputs/figures/farmingexperience.tiff'))
+grid::grid.raster(
+  tiff::readTIFF('outputs/figures/farmingexperience.tiff')
+  )
 
 ```
 
@@ -189,7 +184,9 @@ However, when we explored this possibility using exploratory data analysis, no s
 
 ```{r signs, echo=FALSE, fig.asp=1, fig.width=6.25, fig.cap="Relationship between participants’ recall scores and the signs they looked for when playing the simulation game. Recall scores of participants that did not and did look for each of 8 classic signs of various stages of lameness (Kaler, Wassink and Green 2009), plus an extra category of ‘Other’ signs looked for which we asked participants to elaborate upon. For categorical variables, individual participant data points are jittered using the beeswarm algorithm (R Package 'beeswarm') and mean recall scores are plotted as bold horizontal lines underneath the data points. Mean recall scores coloured red are those likely to be poor estimates due to small sample sizes i.e. the lower or upper quartile exceeds the 95% confidence limits of the mean. The plot is framed in a bold outline if that relationship was formally tested statistically."}
 
-grid::grid.raster(tiff::readTIFF('outputs/figures/symptoms.tiff'))
+grid::grid.raster(
+  tiff::readTIFF('outputs/figures/symptoms.tiff')
+  )
 
 ```
 
@@ -197,7 +194,9 @@ grid::grid.raster(tiff::readTIFF('outputs/figures/symptoms.tiff'))
 
 ```{r UEnulleffects, echo=FALSE, fig.width=6.75, fig.height=4.95, fig.cap="Recall scores of participants according to B) How many times the participant played the game before submitting scores; B) Whether the participant had problems using the game controls; C) Whether the participant observed the sheep up-close, from afar and then zooming in, or using another strategy (e.g. combination of the two); D) How the participant navigated the virtual field to identify sheep; E) Whether the participant completed the pre-game tutorial; F) The participant's computer set-up/pointing device. Individual participant data points are jittered using the beeswarm algorithm (R Package 'beeswarm') and mean recall scores are plotted as bold horizontal lines underneath the data points. Mean recall scores coloured red are those likely to be poor estimates due to small sample sizes i.e. the lower or upper quartile exceeds the 95% confidence limits of the mean. The plot is framed in a bold outline if that relationship was formally tested statistically. For a more detailed explanation of what the categories mean (particularly for 'Observing type' and 'Moving type') please refer to Supplementary Material 2."}
 
-grid::grid.raster(tiff::readTIFF('outputs/figures/UE_nulleffects.tiff'))
+grid::grid.raster(
+  tiff::readTIFF('outputs/figures/UE_nulleffects.tiff')
+  )
 
 ```
 
@@ -207,7 +206,9 @@ Similarly to the 'Farming experience' and 'Lameness signs looked for' variables 
 
 ```{r UEtimespentplaying, echo=FALSE, fig.height=4, fig.width=4, fig.cap="Relationship between participants' recall scores and the time they spent playing the game. Solid black line and shaded area represent the fit and 95% confidence interval of the linear model, respectively."}
 
-grid::grid.raster(tiff::readTIFF('outputs/figures/UE_timespentplaying.tiff'))
+grid::grid.raster(
+  tiff::readTIFF('outputs/figures/UE_timespentplaying.tiff')
+  )
 
 ```
 
@@ -263,7 +264,9 @@ Our online evaluation study highlighted the challenges and opportunities of usin
 
 ```{r label=likertplot, echo=FALSE, fig.width=6, fig.height=3.4, fig.cap="Quantitative feedback given on the game via a Likert Scale questionnaire. Statement rated are shown on the rows, with the total percentages of participants with farming experience responding negatively, neutrally and positively to the statements overlaid on the stacked bar graph."}
 
-grid::grid.raster(tiff::readTIFF('outputs/figures/likertplot.tiff'))
+grid::grid.raster(
+  tiff::readTIFF('outputs/figures/likertplot.tiff')
+  )
 ```
 
 ## User engagement shapes in-game performance where participants struggle to relate to the simulated environment
@@ -333,9 +336,9 @@ The authors declare that the research was conducted in the absence of any commer
 ```{r echo=FALSE, fig.id="designprocessmethods"}
 
 #from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
-block_caption("Development of the Game",
+officer::block_caption("Development of the Game",
               style = "Figure",
-              autonum = run_autonum(seq_id = 'suppmat', 
+              autonum = officer::run_autonum(seq_id = 'suppmat', 
                                     bkm = 'designprocessmethods',
                                     pre_label = "Supplementary Material ",
                                     start_at=NULL))
@@ -366,9 +369,9 @@ For the development of the final prototype that was evaluated in this study, we 
 ```{r echo=FALSE, fig.id="questionnaire"}
 
 #from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
-block_caption("Questionnaire",
+officer::block_caption("Questionnaire",
               style = "Figure",
-              autonum = run_autonum(seq_id = 'suppmat', 
+              autonum = officer::run_autonum(seq_id = 'suppmat', 
                                     bkm = 'questionnaire',
                                     pre_label = "Supplementary Material ",
                                     start_at=NULL))
@@ -589,9 +592,9 @@ How strongly do you agree with the following statements?
 ```{r echo=FALSE, fig.id="thematicanalysis"}
 
 #from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
-block_caption("Thematic analysis results",
+officer::block_caption("Thematic analysis results",
               style = "Figure",
-              autonum = run_autonum(seq_id = 'suppmat', 
+              autonum = officer::run_autonum(seq_id = 'suppmat', 
                                     bkm = 'thematicanalysis',
                                     pre_label = "Supplementary Material ",
                                     start_at=NULL))
@@ -794,9 +797,9 @@ o   Quote 2: "Could be enhanced by slightly more realistic depiction of sheep m
 ```{r echo=FALSE, fig.width=6, fig.id="budget"}
 
 #from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
-block_caption("Project Budget Breakdown",
+officer::block_caption("Project Budget Breakdown",
               style = "Figure",
-              autonum = run_autonum(seq_id = 'suppmat', 
+              autonum = officer::run_autonum(seq_id = 'suppmat', 
                                     bkm = 'budget',
                                     pre_label = "Supplementary Material ",
                                     start_at=NULL))
@@ -805,7 +808,7 @@ block_caption("Project Budget Breakdown",
 
 w=6
 budgettable %>% 
-      flextable %>%
+      flextable::flextable() %>%
       width(., width = (w/(ncol(budgettable)))) %>% 
       theme_box()
 ```
@@ -815,15 +818,17 @@ budgettable %>%
 ```{r echo=FALSE, fig.height=3, fig.width=6.25, fig.id="designprocessfig"}
 
 #from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
-block_caption("Description of the human-centered design process. A) Screenshots of the initial wireframes/prototypes 1a and 1b developed around the concept of antibiotic use in livestock farming; B) Screenshot of prototype 2, 'Where's Woolly' in which players are challenged to identify simple signs of illness in sheep; C) Screenshot of the animations and final game in which they were used, which is the game evaluated in this study.
+officer::block_caption("Description of the human-centered design process. A) Screenshots of the initial wireframes/prototypes 1a and 1b developed around the concept of antibiotic use in livestock farming; B) Screenshot of prototype 2, 'Where's Woolly' in which players are challenged to identify simple signs of illness in sheep; C) Screenshot of the animations and final game in which they were used, which is the game evaluated in this study.
 ",
               style = "Figure",
-              autonum = run_autonum(seq_id = 'suppfig', 
+              autonum = officer::run_autonum(seq_id = 'suppfig', 
                                     bkm = 'designprocessfig',
                                     pre_label = "Supplementary Figure ",
                                     start_at=1))
 
-grid::grid.raster(png::readPNG('outputs/figures/game-evolution_v3.png'))
+grid::grid.raster(
+  png::readPNG('outputs/figures/game-evolution_v3.png')
+  )
 
 ```
 
@@ -831,14 +836,16 @@ grid::grid.raster(png::readPNG('outputs/figures/game-evolution_v3.png'))
 
 ```{r echo=FALSE, fig.asp=1, fig.height=6, fig.id="specificfarmingexperience"}
 
-block_caption("Relationships between participants' recall scores and real-life experience working with sheep as a A) Farmer; B) Stockman/woman/person C) Veterinarian D) Other e.g. academic, policy. Individual participant data points are jittered using the beeswarm algorithm (R Package 'beeswarm') and mean recall scores are plotted as bold horizontal lines underneath the data points. Mean recall scores coloured red are those likely to be poor estimates due to small sample sizes i.e. the lower or upper quartile exceeds the 95% confidence limits of the mean. The plot is framed in a bold outline if that relationship was formally tested statistically.",
+officer::block_caption("Relationships between participants' recall scores and real-life experience working with sheep as a A) Farmer; B) Stockman/woman/person C) Veterinarian D) Other e.g. academic, policy. Individual participant data points are jittered using the beeswarm algorithm (R Package 'beeswarm') and mean recall scores are plotted as bold horizontal lines underneath the data points. Mean recall scores coloured red are those likely to be poor estimates due to small sample sizes i.e. the lower or upper quartile exceeds the 95% confidence limits of the mean. The plot is framed in a bold outline if that relationship was formally tested statistically.",
               style = "Figure",
-              autonum = run_autonum(seq_id = 'suppfig', 
+              autonum = officer::run_autonum(seq_id = 'suppfig', 
                                     bkm = 'specificfarmingexperience',
                                     pre_label = "Supplementary Figure ",
                                     start_at=NULL))
 
-grid::grid.raster(tiff::readTIFF('outputs/figures/specificfarmingexperience.tiff'))
+grid::grid.raster(
+  tiff::readTIFF('outputs/figures/specificfarmingexperience.tiff')
+  )
 
 ```
 
@@ -847,9 +854,9 @@ grid::grid.raster(tiff::readTIFF('outputs/figures/specificfarmingexperience.tiff
 ```{r echo=FALSE, fig.height=6, fig.width=6, fig.id="fitfarmingexperience"}
 
 #from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
-block_caption("Diagnostic plots for the 'Farming Experience' model. From top left to bottom right: Residuals vs Fitted plot showing if residuals have linear patterns (residuals should be approximately equally spread around the horizontal red line if so); Normal Q-Q plot showing if residuals are normally distributed (residuals should approximately follow the dashed line if so); Scale-Location plot showing if residuals are spread equally along the ranges of the predictors (residuals should be approximately equally spread around the horizontal red line if so); Residuals vs Leverage plot to identify any outliers that are influential in the linear regression (Cook's distance lines should not be visible and/or points should all be within Cook's distance lines)",
+officer::block_caption("Diagnostic plots for the 'Farming Experience' model. From top left to bottom right: Residuals vs Fitted plot showing if residuals have linear patterns (residuals should be approximately equally spread around the horizontal red line if so); Normal Q-Q plot showing if residuals are normally distributed (residuals should approximately follow the dashed line if so); Scale-Location plot showing if residuals are spread equally along the ranges of the predictors (residuals should be approximately equally spread around the horizontal red line if so); Residuals vs Leverage plot to identify any outliers that are influential in the linear regression (Cook's distance lines should not be visible and/or points should all be within Cook's distance lines)",
               style = "Figure",
-              autonum = run_autonum(seq_id = 'suppfig', 
+              autonum = officer::run_autonum(seq_id = 'suppfig', 
                                     bkm = 'fitfarmingexperience',
                                     pre_label = "Supplementary Figure ",
                                     start_at=NULL))
@@ -866,14 +873,16 @@ plot(farmingexperience_model)
 
 #from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
 
-block_caption("Balloon plot of contingency table used to conduct chi-squared test for a difference in the lameness signs looked for according to real-life farming experience. Size of the circles/balloons reflects the frequency of participants that looked for that lameness sign (relative to the total number of signs looked for by both groups)",
+officer::block_caption("Balloon plot of contingency table used to conduct chi-squared test for a difference in the lameness signs looked for according to real-life farming experience. Size of the circles/balloons reflects the frequency of participants that looked for that lameness sign (relative to the total number of signs looked for by both groups)",
               style = "Figure",
-              autonum = run_autonum(seq_id = 'suppfig', 
+              autonum = officer::run_autonum(seq_id = 'suppfig', 
                                     bkm = 'balloonplot',
                                     pre_label = "Supplementary Figure ",
                                     start_at=NULL))
 
-grid::grid.raster(tiff::readTIFF('outputs/figures/balloonplot.tiff'))
+grid::grid.raster(
+  tiff::readTIFF('outputs/figures/balloonplot.tiff')
+  )
 
 
 ```
@@ -883,9 +892,9 @@ grid::grid.raster(tiff::readTIFF('outputs/figures/balloonplot.tiff'))
 ```{r echo=FALSE, fig.height=6, fig.width=6, fig.id="fitunevenposture"}
 
 #from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
-block_caption("Diagnostic plots for the 'Lameness signs looked for' model A (uneven posture) model. From top left to bottom right: Residuals vs Fitted plot showing if residuals have linear patterns (residuals should be approximately equally spread around the horizontal red line if so); Normal Q-Q plot showing if residuals are normally distributed (residuals should approximately follow the dashed line if so); Scale-Location plot showing if residuals are spread equally along the ranges of the predictors (residuals should be approximately equally spread around the horizontal red line if so); Residuals vs Leverage plot to identify any outliers that are influential in the linear regression (Cook's distance lines should not be visible and/or points should all be within Cook's distance lines)",
+officer::block_caption("Diagnostic plots for the 'Lameness signs looked for' model A (uneven posture) model. From top left to bottom right: Residuals vs Fitted plot showing if residuals have linear patterns (residuals should be approximately equally spread around the horizontal red line if so); Normal Q-Q plot showing if residuals are normally distributed (residuals should approximately follow the dashed line if so); Scale-Location plot showing if residuals are spread equally along the ranges of the predictors (residuals should be approximately equally spread around the horizontal red line if so); Residuals vs Leverage plot to identify any outliers that are influential in the linear regression (Cook's distance lines should not be visible and/or points should all be within Cook's distance lines)",
               style = "Figure",
-              autonum = run_autonum(seq_id = 'suppfig', 
+              autonum = officer::run_autonum(seq_id = 'suppfig', 
                                     bkm = 'fitunevenposture',
                                     pre_label = "Supplementary Figure ",
                                     start_at=NULL))
@@ -900,9 +909,9 @@ plot(signs_unevenposture_model)
 ```{r echo=FALSE, fig.height=6, fig.width=6, fig.id="fitlimp"}
 
 #from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
-block_caption("Diagnostic plots for the 'Lameness signs looked for' model B (limp) model. From top left to bottom right: Residuals vs Fitted plot showing if residuals have linear patterns (residuals should be approximately equally spread around the horizontal red line if so); Normal Q-Q plot showing if residuals are normally distributed (residuals should approximately follow the dashed line if so); Scale-Location plot showing if residuals are spread equally along the ranges of the predictors (residuals should be approximately equally spread around the horizontal red line if so); Residuals vs Leverage plot to identify any outliers that are influential in the linear regression (Cook's distance lines should not be visible and/or points should all be within Cook's distance lines)",
+officer::block_caption("Diagnostic plots for the 'Lameness signs looked for' model B (limp) model. From top left to bottom right: Residuals vs Fitted plot showing if residuals have linear patterns (residuals should be approximately equally spread around the horizontal red line if so); Normal Q-Q plot showing if residuals are normally distributed (residuals should approximately follow the dashed line if so); Scale-Location plot showing if residuals are spread equally along the ranges of the predictors (residuals should be approximately equally spread around the horizontal red line if so); Residuals vs Leverage plot to identify any outliers that are influential in the linear regression (Cook's distance lines should not be visible and/or points should all be within Cook's distance lines)",
               style = "Figure",
-              autonum = run_autonum(seq_id = 'suppfig', 
+              autonum = officer::run_autonum(seq_id = 'suppfig', 
                                     bkm = 'fitlimp',
                                     pre_label = "Supplementary Figure ",
                                     start_at=NULL))
@@ -917,9 +926,9 @@ plot(sign_limp_model)
 ```{r echo=FALSE, fig.height=6, fig.width=6, fig.id="fitraisedleg"}
 
 #from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
-block_caption("Diagnostic plots for the 'Lameness signs looked for' model C (raised leg) model. From top left to bottom right: Residuals vs Fitted plot showing if residuals have linear patterns (residuals should be approximately equally spread around the horizontal red line if so); Normal Q-Q plot showing if residuals are normally distributed (residuals should approximately follow the dashed line if so); Scale-Location plot showing if residuals are spread equally along the ranges of the predictors (residuals should be approximately equally spread around the horizontal red line if so); Residuals vs Leverage plot to identify any outliers that are influential in the linear regression (Cook's distance lines should not be visible and/or points should all be within Cook's distance lines)",
+officer::block_caption("Diagnostic plots for the 'Lameness signs looked for' model C (raised leg) model. From top left to bottom right: Residuals vs Fitted plot showing if residuals have linear patterns (residuals should be approximately equally spread around the horizontal red line if so); Normal Q-Q plot showing if residuals are normally distributed (residuals should approximately follow the dashed line if so); Scale-Location plot showing if residuals are spread equally along the ranges of the predictors (residuals should be approximately equally spread around the horizontal red line if so); Residuals vs Leverage plot to identify any outliers that are influential in the linear regression (Cook's distance lines should not be visible and/or points should all be within Cook's distance lines)",
               style = "Figure",
-              autonum = run_autonum(seq_id = 'suppfig', 
+              autonum = officer::run_autonum(seq_id = 'suppfig', 
                                     bkm = 'fitraisedleg',
                                     pre_label = "Supplementary Figure ",
                                     start_at=NULL))
@@ -934,9 +943,9 @@ plot(sign_raisedleg_model)
 ```{r echo=FALSE, fig.height=6, fig.width=6, fig.id="fitUE"}
 
 #from https://stackoverflow.com/questions/54915628/restart-figure-numbering-for-appendix-supplementary-material-in-bookdown
-block_caption("Diagnositc plots for the 'User Engagement' model.  From top left to bottom right: Residuals vs Fitted plot showing if residuals have linear patterns (residuals should be approximately equally spread around the horizontal red line if so); Normal Q-Q plot showing if residuals are normally distributed (residuals should approximately follow the dashed line if so); Scale-Location plot showing if residuals are spread equally along the ranges of the predictors (residuals should be approximately equally spread around the horizontal red line if so); Residuals vs Leverage plot to identify any outliers that are influential in the linear regression (Cook's distance lines should not be visible and/or points should all be within Cook's distance lines)",
+officer::block_caption("Diagnositc plots for the 'User Engagement' model.  From top left to bottom right: Residuals vs Fitted plot showing if residuals have linear patterns (residuals should be approximately equally spread around the horizontal red line if so); Normal Q-Q plot showing if residuals are normally distributed (residuals should approximately follow the dashed line if so); Scale-Location plot showing if residuals are spread equally along the ranges of the predictors (residuals should be approximately equally spread around the horizontal red line if so); Residuals vs Leverage plot to identify any outliers that are influential in the linear regression (Cook's distance lines should not be visible and/or points should all be within Cook's distance lines)",
               style = "Figure",
-              autonum = run_autonum(seq_id = 'suppfig', 
+              autonum = officer::run_autonum(seq_id = 'suppfig', 
                                     bkm = 'fitUE',
                                     pre_label = "Supplementary Figure ",
                                     start_at=NULL))

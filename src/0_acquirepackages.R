@@ -10,10 +10,13 @@ if('rstudioapi'%in%rownames(installed.packages())==F){
   install.packages('rstudioapi')
 }
 
+#make a vector of scripts that we need to run
+scripts<-list.files('src/', full.names = T)[-grep('acquirepackages.R',list.files('src/', full.names = T))]
+#add the markdown script to this (it's outside of the 'src directory)
+scripts<-c(scripts,'lamenessgame_MS.Rmd')
+
 #parse the lines in the scripts to create searchable strings
-file_lines<-unlist(sapply(
-  list.files('src/', full.names = T)[-grep('acquirepackages.R',list.files('src/', full.names = T))],
-  readLines))
+file_lines<-unlist(sapply(scripts,readLines))
 
 #find packages by looking for ::'s in scripts
 pckgs <- lapply(file_lines, function(l) { 
@@ -27,6 +30,9 @@ pckgs <- lapply(file_lines, function(l) {
 
 #Create a vector of all required packages for this repo's code
 required_packages<-unique(unlist(pckgs))
+#add R Markdown to the list
+required_packages<-c(required_packages,'rmarkdown')
+
 # Create a vector of all packages are already installed
 installed_packages<-rownames(installed.packages())
 # Create a vector of packages that need to be installed on this computer to run the repo's code
