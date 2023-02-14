@@ -5,7 +5,7 @@ README
 <img src="https://github.com/befriendabacterium/lamenessgame/blob/main/game_screenshots.png" width="80%" height="80%">
 </p>
 
-This repository contains the code associated with the manuscript 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition'. The data are stored at https://osf.io/a6qu4/ and downloaded, processed and analysed in this pipeline. To run the pipeline and reproduce the analysis and manuscript itself, please clone (https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) or download (green 'Code' button, top right) this repository  to your local computer, open the R project file ('lamenessgame_repo.Rproj'), and then run each of the R scripts in 'src' in RStudio individually and in order (see 'Pipeline' below). 
+This repository contains the code associated with the manuscript 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition'. The data are stored at https://osf.io/a6qu4/ and downloaded, processed and analysed in this pipeline. To run the pipeline and reproduce the analysis and manuscript itself, please download (green 'Code' button, top right of this page) or clone (https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) this repository  to your local computer, open the R project file ('lamenessgame_repo.Rproj'), and then run each of the R scripts in 'src' in RStudio individually and in order (see 'Pipeline' below). 
 
 If you want to see the outputs of the code without running it, then just head over to https://doi.org/10.5281/zenodo.7605244, where all code, input and output data are archived. If you're reading this having downloaded this Zenodo repository but want to run the code anyway, then you can skip straight to step 2 ('2. Process raw data') in the pipeline.
 
@@ -15,7 +15,7 @@ If you'd just like to play the game, then head over to https://wheres-woolly.itc
 
 * author = Matt Lloyd Jones
 * web = https://github.com/befriendabacterium/lamenessgame
-* date = February 6th, 2023
+* date = February 14th, 2023
 * description = This repository contains a pipeline to reproduce the analyses in the preprint 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition' (https://www.biorxiv.org/content/10.1101/2022.10.26.513828v2).
 
 ## Pipeline
@@ -83,7 +83,7 @@ Before beginning anything, please open the 'lamenessgame_repo.Rproj' R Project f
  
  *N.B. Running R Markdown scripts works a little differently to running R scripts - open them in RStudio and then click the 'Knit' button (ball of twine with needle through it) instead of running R code as you usually would. You'll need 'rmarkdown' and a few other packages to get this to work - I've tried to include these in '0_acquirepackages.R' but if RStudio prompts you for more, then just click 'Yes' to install the packages. Another thing to note is that the outputted Word document may prompt you when opened with 'This document contains references to other files. Do you want to update the fields in this document - Yes/No' - just click 'Yes' and the Word doc should open fine.*
    
-   * **script**: `lamenessgame_MS.Rmd`: Run this R Markdown script to reproduce the submitted manuscript.
+   * **script**: `lamenessgame_MS.Rmd`: Run this R Markdown script to reproduce the submitted manuscript. Note this sits outside of the 'src' folder, in the main directory.
    * **inputs**: 
       * `outputs`: Contents of the 'outputs' folder and its sub-folders, which contain all processed data, models and figures used in the paper.
       * `article_template.docx`: A template Word article which contains the necessary Styles to make the manuscript look how we want.
