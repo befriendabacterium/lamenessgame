@@ -9,7 +9,12 @@ This repository contains the code associated with the manuscript 'Exploring the 
 
 If you want to see the outputs of the code without running it, then just head over to https://doi.org/10.5281/zenodo.7605244, where all code, input and output data are archived. If you're reading this having downloaded this Zenodo repository but want to run the code anyway, then you can skip straight to step 2 ('2. Process raw data') in the pipeline.
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7605244.svg)](https://doi.org/10.5281/zenodo.7605244)
+
 If you'd just like to play the game, then head over to https://wheres-woolly.itch.io/lameness-game to play it online, or to https://doi.org/10.5281/zenodo.7612059 to play it offline.
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7612059.svg)](https://doi.org/10.5281/zenodo.7612059)
+
 
 ## Description
 
