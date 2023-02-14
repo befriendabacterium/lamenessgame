@@ -21,7 +21,7 @@ If you'd just like to play the game, then head over to https://wheres-woolly.itc
 * author = Matt Lloyd Jones
 * web = https://github.com/befriendabacterium/lamenessgame
 * date = February 14th, 2023
-* description = This repository contains a pipeline to reproduce the analyses in the preprint 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition' (https://www.biorxiv.org/content/10.1101/2022.10.26.513828v2).
+* description = This repository contains a pipeline to reproduce the analyses in the preprint 'Exploring the potential of using simulation games for engaging with sheep farmers about lameness recognition' (https://doi.org/10.3389/fvets.2023.1079948).
 
 ## Pipeline
 
